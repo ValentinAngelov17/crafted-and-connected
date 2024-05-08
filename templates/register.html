@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
+    <title>Register</title>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{% url 'index' %}"><img src="{% static 'images/Crafted and connected.png' %}" alt="Logo"></a>
+        </div>
+        <div class="search">
+            <input type="text" placeholder="Търси...">
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="buttons">
+            <a href="#" class="shopping-cart"><i class="fas fa-shopping-cart"></i></a>
+            <a href="#">Вход</a>
+        </div>
+    </nav>
+    <header class="top-header-register">
+        <h1>Crafted & Connected</h1>
+        <h2>
+            Социална платформа за купуване и продаване на ръчно изработени изделия
+        </h2>
+    </header>
+
+    <!-- container div -->
+    <div class="container">
+ 
+        <!-- upper button section to select
+             the login or signup form -->
+        
+        <div class="btn">
+            <button class="signup" style="left: 12px;"><a href="{% url 'login' %}">Вход</a></button>
+            <button class="login" style="width: 152px; right: -26px;"><a href="{% url 'register' %}">Регистрация</a></button>
+        </div>
+ 
+        <!-- Form section that contains the
+             login and the signup form -->
+        <div class="form-section">
+ 
+            <!-- login form -->
+            
+            <!-- signup form -->
+            <div class="signup-box">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="clkbtn" type="submit" style="margin: 20px 130px">Регистрация</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'css/register.js' %}"></script>
+</body>
+
+</html>

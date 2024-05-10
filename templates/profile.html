@@ -14,7 +14,8 @@
 <body>
 <nav>
     <div class="logo">
-        
+
+
         <a href="{% url 'index' %}"><img src="{% static "images/Crafted and connected.png" %}" alt="Logo"></a>
     </div>
     <div class="buttons">
@@ -32,16 +33,26 @@
 </nav>
 <div>
     <h1>User Profile</h1>
+    {% if user.profile_picture %}
+        <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" style="height: 200px; width: 200px;">
+    {% else %}
+        <!-- Display a default image if the user hasn't uploaded a profile picture -->
+        <img src="{% static 'images/durvo.jpg' %}" alt="Default Profile Picture" style="width: 200px; height: 200px;">
+    {% endif %}
+    <p><strong><a href="{% url 'update_profile_picture' %}">Update profile picture:</a></strong></p>
     <p><strong>Email:</strong> {{ user.email }}</p>
     <p><strong>First name:</strong> {{ user.first_name }}</p>
     <p><strong>Last name:</strong> {{ user.last_name }}</p>
+    <p>Followers: {{ followers_count }}</p>
+    <p>Following: {{ following_count }}</p>
+    <p>Описание: {{ user.description }}</p>
 
 </div>
 <div>
     <form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
 </div>
 
 </body>

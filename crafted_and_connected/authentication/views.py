@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import CreateView, FormView
-from crafted_and_connected.authentication.forms import CustomUserCreationForm, CustomUserLoginForm
-from crafted_and_connected.authentication.models import CustomUser
+from crafted_and_connected.authentication.forms import CustomUserCreationForm, CustomUserLoginForm, ProfilePictureForm
+from crafted_and_connected.authentication.models import Follow
 from django.contrib.auth.hashers import check_password, make_password
 
 
@@ -50,10 +50,30 @@ class CustomLoginView(LoginView):
 
 @login_required
 def profile(request):
-    return render(request, 'profile.html')
+    user = request.user
+    followers_count = Follow.objects.filter(followed=user).count()
+    following_count = Follow.objects.filter(follower=user).count()
+    return render(request, 'profile.html',
+                  {'user': user, 'followers_count': followers_count, 'following_count': following_count})
 
 
 @login_required
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+
+# views.py
+from django.shortcuts import render, redirect
+from .forms import ProfilePictureForm
+
+
+def update_profile_picture(request):
+    if request.method == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to profile page after successful update
+    else:
+        form = ProfilePictureForm(instance=request.user)
+    return render(request, 'update_profile_picture.html', {'form': form})

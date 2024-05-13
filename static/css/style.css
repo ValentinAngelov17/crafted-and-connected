@@ -894,3 +894,17 @@ li b {
     font-style: normal;
     padding-top: 10px;
 }
+
+.user-profile{
+    text-align: center;
+    height: 800px;
+    margin: 5%;
+    background-color: #c5c5c5;
+    border-radius: 50px;
+
+}
+.user-details{
+    display: flex;
+    justify-content: space-around;
+    gap: 40px;
+}

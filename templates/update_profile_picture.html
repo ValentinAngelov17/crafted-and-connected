@@ -1,37 +1,12 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crafted & Connected</title>
+{% block page_content %}
+<title>Crafted & Connected</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
-
-
-</head>
-<body>
-<nav>
-    <div class="logo">
-        <a href="{% url 'index' %}"><img src="{% static "images/Crafted and connected.png" %}" alt="Logo"></a>
-    </div>
-    <div class="buttons">
-        <a href="register.html">За нас</a>
-        <a href="{% url 'profile' %}"> profile</a>
-    </div>
-
-    <div class="search">
-        <input type="text" placeholder="Търси...">
-        <button type="submit"><i class="fas fa-search"></i></button>
-    </div>
-    <div class="buttons">
-        <a href="#" class="shopping-cart"><i class="fas fa-shopping-cart"></i></a>
-        <a href="{% url 'register' %}">Регистрация</a>
-    </div>
-</nav>
 <h1>Update Profile Picture</h1>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -39,4 +14,4 @@
     <button type="submit">Update Profile Picture</button>
 </form>
 
-</body>
+{% endblock %}

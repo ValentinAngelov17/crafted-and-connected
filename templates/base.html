@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crafted & Connected</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+<nav>
+    <div class="logo">
+        <a href="{% url 'index' %}"><img src="{% static "images/Crafted and connected.png" %}" alt="Logo"></a>
+    </div>
+    <div class="buttons">
+        <a href="register.html">За нас</a>
+    </div>
+    {% if request.user.is_authenticated %}
+        <div class="buttons">
+            <a href="add-item.html" class="after-login-buttons">Добави</a>
+        </div>
+    {% endif %}
+    <div class="search">
+        <input type="text" placeholder="Търси...">
+        <button type="submit"><i class="fas fa-search"></i></button>
+    </div>
+    {% if request.user.is_authenticated %}
+        <div class="buttons">
+            <a href="#" class="after-login-buttons">Съобщения</a>
+        </div>
+    {% endif %}
+    <div class="buttons">
+        <a href="#" class="shopping-cart"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+    <div class="buttons">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'profile' %}"> Профил</a>
+        {% else %}
+            <a href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+    </div>
+</nav>
+{% block page_content %}
+{% endblock %}
+</body>
+</html>

@@ -88,6 +88,8 @@ nav {
     align-items: center;
     padding: 10px;
     justify-content: space-between;
+    width: 80%;
+    margin: auto;
 }
 
 .logo img {

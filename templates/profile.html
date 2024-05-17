@@ -1,71 +1,42 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block page_content %}
     <title>Crafted & Connected</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
-</head>
-<body>
-<nav>
-    <div class="logo">
+    <div class="user-profile">
+        <div><h1>Профил</h1></div>
+        <div class="user-details">
+            {% if user.profile_picture %}
+                <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture"
+                     style="height: 150px; width: 150px; border-radius: 100px;">
+            {% else %}
+                <!-- Display a default image if the user hasn't uploaded a profile picture -->
+                <img src="{% static 'images/durvo.jpg' %}" alt="Default Profile Picture"
+                     style="width: 200px; height: 200px;">
+            {% endif %}
 
-
-        <a href="{% url 'index' %}"><img src="{% static "images/Crafted and connected.png" %}" alt="Logo"></a>
-    </div>
-    <div class="buttons">
-        <a href="register.html">За нас</a>
-    </div>
-
-    <div class="search">
-        <input type="text" placeholder="Търси...">
-        <button type="submit"><i class="fas fa-search"></i></button>
-    </div>
-    <div class="buttons">
-        <a href="#" class="shopping-cart"><i class="fas fa-shopping-cart"></i></a>
-        <a href="{% url 'register' %}">Регистрация</a>
-    </div>
-</nav>
-<div class="user-profile">
-    <div><h1>User Profile</h1></div>
-    <div class="user-details">
-        {% if user.profile_picture %}
-            <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture"
-                 style="height: 150px; width: 150px; border-radius: 100px;">
-        {% else %}
-            <!-- Display a default image if the user hasn't uploaded a profile picture -->
-            <img src="{% static 'images/durvo.jpg' %}" alt="Default Profile Picture"
-                 style="width: 200px; height: 200px;">
-        {% endif %}
-   
-        
-
-        <p style="height: 20px;"><strong>First name:</strong> {{ user.first_name }}</p>
-        <p><strong>Last name:</strong> {{ user.last_name }}</p>
-        <p>Followers: {{ followers_count }}</p>
-        <p>Following: {{ following_count }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-    <form action="{% url 'logout' %}" method="post">
+            <p style="height: 20px;"><strong>First name:</strong> {{ user.first_name }}</p>
+            <p><strong>Last name:</strong> {{ user.last_name }}</p>
+            <p>Followers: {{ followers_count }}</p>
+            <p>Following: {{ following_count }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
                 <button type="submit">Logout</button>
             </form>
-    </div>
-    <div class="user-details" style="height: 200px;">
-        <div><p><strong><a href="{% url 'update_profile_picture' %}">Update profile picture:</a></strong></p></div>
+        </div>
+        <div class="user-details" style="height: 200px;">
+            <div><p><strong><a href="{% url 'update_profile_picture' %}">Update profile picture:</a></strong></p></div>
 
-        <p>Описание: {{ user.description }}</p>
-        <div>
-            
+            <p>Описание: {{ user.description }}</p>
+            <div>
+
+            </div>
         </div>
     </div>
-
-</div>
-
-
-</body>
-</html>
+    
+{% endblock %}

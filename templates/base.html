@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
+    
 
 
 </head>
@@ -23,7 +24,7 @@
     </div>
     {% if request.user.is_authenticated %}
         <div class="buttons">
-            <a href="add-item.html" class="after-login-buttons">Добави</a>
+            <a href="{% url 'add_post' %}" class="after-login-buttons">Добави</a>
         </div>
     {% endif %}
     <div class="search">

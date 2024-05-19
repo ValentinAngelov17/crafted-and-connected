@@ -8,6 +8,7 @@ from django.views.generic import CreateView, FormView
 from crafted_and_connected.authentication.forms import CustomUserCreationForm, CustomUserLoginForm, ProfilePictureForm
 from crafted_and_connected.authentication.models import Follow
 from django.contrib.auth.hashers import check_password, make_password
+from crafted_and_connected.social.models import Post
 
 
 # Create your views here.
@@ -51,10 +52,15 @@ class CustomLoginView(LoginView):
 @login_required
 def profile(request):
     user = request.user
+
+    posts = Post.objects.filter(user=user).order_by('-created_at')
+    post_count = posts.count()
+    print("Posts:", posts)
     followers_count = Follow.objects.filter(followed=user).count()
     following_count = Follow.objects.filter(follower=user).count()
     return render(request, 'profile.html',
-                  {'user': user, 'followers_count': followers_count, 'following_count': following_count})
+                  {'user': user, 'followers_count': followers_count, 'following_count': following_count,
+                   'posts': posts, 'post_count': post_count})
 
 
 @login_required

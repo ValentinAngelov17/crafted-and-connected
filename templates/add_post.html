@@ -7,33 +7,37 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <h1>Add a New Post</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-
         <button type="submit">Add Post</button>
     </form>
 
     <script>
-        // jQuery script to update subcategories based on selected category
         $(document).ready(function() {
             $('#id_category').change(function() {
-                var categoryId = $(this).val();
-                if (categoryId) {
+                var category = $(this).val();
+                var subcategorySelect = $('#id_subcategory');
+                subcategorySelect.empty();
+
+                if (category) {
                     $.ajax({
-                        url: '{% url "load_subcategories" %}', // Add URL for your AJAX view
+                        url: '{% url "load_subcategories" %}',
                         data: {
-                            'category_id': categoryId
+                            'category': category
                         },
                         success: function(data) {
-                            $("#id_subcategory").html(data);
+                            subcategorySelect.append('<option value="">Select a subcategory</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                subcategorySelect.append('<option value="' + data[i].value + '">' + data[i].display + '</option>');
+                            }
                         }
                     });
                 } else {
-                    $("#id_subcategory").html('<option value="">Select a subcategory</option>');
+                    subcategorySelect.append('<option value="">Select a subcategory</option>');
                 }
             });
         });

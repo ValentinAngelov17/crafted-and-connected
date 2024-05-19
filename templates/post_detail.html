@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+    <title>Crafted & Connected</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
+    <title>{{ post.title }}</title>
+
+    <div class="post-detail">
+        <h1>{{ post.title }}</h1>
+        <img src="{{ post.photos.url }}" alt="post photo" style="width: 100%; max-width: 600px;">
+        <p>{{ post.description }}</p>
+        <p>Price: {{ post.price }}</p>
+        <p>Delivery Time: {{ post.delivery_time }} days</p>
+        <p>Category: {{ post.get_category_display }}</p>
+        <p>Subcategory: {{ post.get_subcategory_display }}</p>
+
+        <!-- Likes -->
+        <form method="POST" action="{% url 'like_post' post.id %}">
+            {% csrf_token %}
+            <button type="submit" class="like-button">
+                {% if is_liked %} Unlike {% else %} Like {% endif %}
+            </button>
+            {{ post.likes.count }} likes
+        </form>
+
+        <!-- Comments -->
+        <div class="comments">
+            <h3>Comments</h3>
+            <ul>
+                {% for comment in comments %}
+                    <li>{{ comment.user.first_name }} {{ comment.user.last_name }}: {{ comment.text }}</li>
+                {% empty %}
+                    <p>No comments yet.</p>
+                {% endfor %}
+            </ul>
+
+            <!-- Add a comment -->
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Add Comment</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

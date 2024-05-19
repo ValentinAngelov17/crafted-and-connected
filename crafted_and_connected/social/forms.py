@@ -1,33 +1,35 @@
 from django import forms
-from .models import Post, Subcategory
+from .models import Post, CATEGORY_CHOICES, SUBCATEGORY_CHOICES, Comment
 
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'description', 'price', 'delivery_time', 'category', 'subcategory', 'photos']
-        widgets = {
-            'subcategory': forms.Select(),
-        }
+
+    category = forms.ChoiceField(choices=CATEGORY_CHOICES, required=True)
+    subcategory = forms.ChoiceField(choices=[], required=True)
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['title'].required = True
-        self.fields['description'].required = True
-        self.fields['price'].required = True
-        self.fields['delivery_time'].required = True
-        self.fields['category'].required = True
-        self.fields['subcategory'].required = True
-        self.fields['photos'].required = True
-
-        self.fields['subcategory'].queryset = Subcategory.objects.none()
+        self.fields['category'].choices = CATEGORY_CHOICES
+        self.fields['subcategory'].choices = []
 
         if 'category' in self.data:
             try:
-                category_id = int(self.data.get('category'))
-                self.fields['subcategory'].queryset = Subcategory.objects.filter(category_id=category_id).order_by(
-                    'name')
+                category = self.data.get('category')
+                self.fields['subcategory'].choices = SUBCATEGORY_CHOICES.get(category, [])
             except (ValueError, TypeError):
                 pass
         elif self.instance.pk:
-            self.fields['subcategory'].queryset = self.instance.category.subcategories.order_by('name')
+            category = self.instance.category
+            self.fields['subcategory'].choices = SUBCATEGORY_CHOICES.get(category, [])
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add a comment...'}),
+        }

@@ -9,6 +9,6 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('profile/', profile, name='profile'),
     path('logout/', logout_view, name='logout'),
-    path('update_profile_picture/', update_profile_picture, name='update_profile_picture')
+    path('update_profile_picture/', update_profile_picture, name='update_profile_picture'),
 ]
 

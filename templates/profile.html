@@ -8,8 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
     <div class="user-profile">
-        <div><h1>Профил</h1></div>
-        <div class="user-details">
+        <div><h1 style="font-family:  'Roboto Slab', serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;">Профил</h1></div>
+        <div>
             {% if user.profile_picture %}
                 <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture"
                      style="height: 150px; width: 150px; border-radius: 100px;">
@@ -19,24 +22,45 @@
                      style="width: 200px; height: 200px;">
             {% endif %}
 
-            <p style="height: 20px;"><strong>First name:</strong> {{ user.first_name }}</p>
-            <p><strong>Last name:</strong> {{ user.last_name }}</p>
-            <p>Followers: {{ followers_count }}</p>
-            <p>Following: {{ following_count }}</p>
+        </div>
+        <div class="user-details">
+            <p style="height: 20px;"><strong>Име:</strong> {{ user.first_name }}</p>
+            <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+            <p><strong>Последователи:</strong> {{ followers_count }}</p>
+            <p><strong>Последвани: </strong>{{ following_count }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+
+        <div class="user-details" style="margin: 20px;"><p>Описание: {{ user.description }}</p></div>
+        <div class="buttons">
+            <a class="after-login-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
+        </div>
+        <div>
             <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
-                <button type="submit">Logout</button>
+                <button class="after-login-buttons"
+                        style="background-color: #ee4c4b; color: white; margin: 16px;
+                         padding: 8px 20px; border: 1px solid white;border-radius: 30px; width: 130px; "
+                        type="submit">Изход
+                </button>
             </form>
+
+
         </div>
-        <div class="user-details" style="height: 200px;">
-            <div><p><strong><a href="{% url 'update_profile_picture' %}">Update profile picture:</a></strong></p></div>
-
-            <p>Описание: {{ user.description }}</p>
-            <div>
-
-            </div>
+        <h2> {{ post_count }} Публикации</h2>
+        <div class="post-grid">
+            {% for post in posts %}
+                <div class="post-item">
+                  <p>Post ID: {{ post.id }}</p> 
+                   
+                        <img style="width: 200px; height: 200px;" src="{{ post.photos.url }}" alt="post photos"
+                             class="img-fluid">
+                    
+                </div>
+            {% empty %}
+                <p>No posts yet.</p>
+            {% endfor %}
         </div>
     </div>
-    
+
 {% endblock %}

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block page_content %}
     <title>Crafted & Connected</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -9,41 +11,124 @@
     <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
     <title>{{ post.title }}</title>
 
-    <div class="post-detail">
-        <h1>{{ post.title }}</h1>
-        <img src="{{ post.photos.url }}" alt="post photo" style="width: 100%; max-width: 600px;">
-        <p>{{ post.description }}</p>
-        <p>Price: {{ post.price }}</p>
-        <p>Delivery Time: {{ post.delivery_time }} days</p>
-        <p>Category: {{ post.get_category_display }}</p>
-        <p>Subcategory: {{ post.get_subcategory_display }}</p>
 
-        <!-- Likes -->
-        <form method="POST" action="{% url 'like_post' post.id %}">
-            {% csrf_token %}
-            <button type="submit" class="like-button">
-                {% if is_liked %} Unlike {% else %} Like {% endif %}
-            </button>
-            {{ post.likes.count }} likes
-        </form>
 
-        <!-- Comments -->
-        <div class="comments">
-            <h3>Comments</h3>
-            <ul>
-                {% for comment in comments %}
-                    <li>{{ comment.user.first_name }} {{ comment.user.last_name }}: {{ comment.text }}</li>
-                {% empty %}
-                    <p>No comments yet.</p>
-                {% endfor %}
-            </ul>
 
-            <!-- Add a comment -->
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Add Comment</button>
-            </form>
+    <div class="post">
+        <div class="picture">
+            <img src="{{ post.photos.url }}" alt="">
         </div>
+        <div class="post-decription">
+            <div class="grid-container">
+                <div class="item1"><h3>{{ post.user.first_name }} {{ post.user.last_name }}</h3></div>
+
+
+                <div class="item11">
+                    <div class="buttons"><a href="">Последвай</a></div>
+                </div>
+                <div class="item3">
+                    <div class="buttons">
+                        <a href="">Съобщение</a>
+                    </div>
+                </div>
+                <div class="item2"><i class="fas fa-star" style="color: gold;"> 5.0</i></div>
+                <div class="item12">
+                    <strong><b>{{ post.title }}</b></strong>
+                </div>
+                <div class="item13">
+                    <strong><b> Срок на доставка: {{ post.delivery_time }} дни</b></strong>
+                </div>
+
+                <div class="item4">
+                    {{ post.description }}
+                </div>
+
+                <div class="item5">
+                    <div class="buttons">
+                        <a href="">{{ post.get_category_display }}</a>
+                    </div>
+
+                </div>
+                <div class="buttons">
+                    <a href="">{{ post.get_subcategory_display }}</a>
+                </div>
+                <div class="item6">
+                    Цена: {{ post.price }} лв
+                </div>
+                <div class="buttons">
+                    <a href="">Купи</a>
+                </div>
+
+            </div>
+            <div class="comments">
+            <h3 style="padding-left: 20px;">Коментари:</h3>
+                <ul>
+                    {% for comment in comments %}
+                        <li style="font-size: 22px; padding-left: 10px;">
+                            <div class="comment">
+                                <img
+                                        style="width: 50px;height: 50px; border-radius: 50px;"
+                                        src="{{ comment.user.profile_picture.url }}"
+                                        alt="">
+                                <div class="comment-content">
+                                    <div>
+                                        <b>{{ comment.user.first_name }} {{ comment.user.last_name }} </b>{{ comment.created_at|timesince }}
+                                        ago
+                                    </div>
+                                    <div>{{ comment.text }}</div>
+                                </div>
+
+
+                            </div>
+                        </li>
+                    {% empty %}
+                        <p style="padding-left: 20px;">No comments yet.</p>
+                    {% endfor %}
+                </ul>
+
+                <!-- Add a comment -->
+
+            </div>
+
+            <div class="comments-property">
+                <div>
+                    <h3 style="margin-left: 20px;">Коментари: {{ post.comments.count }}</h3>
+                </div>
+
+                <div>
+                    <div class="buttons">
+                        <form method="POST" action="{% url 'like_post' post.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="like-button">
+                                <i class="fas fa-heart" style="color: red;">{% if is_liked %} Unlike {% else %}
+                                    Like {% endif %}</i>
+                            </button>
+                            <i class="fas fa-heart" style="color: red;">{{ post.likes.count }} likes</i>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+            <footer>
+                <div class="add-comments" style="border-style: hidden;">
+                    <div><img style="width: 60px; height: 60px; margin-left: 20px; border-radius: 50px;"
+                              src="{{ request.user.profile_picture.url }}" alt=""></div>
+                    <form class="comment-form" method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="comment-btn" type="submit"
+                                style="height: 50px; color: #fff; text-decoration: none;">
+                            Добави коментар
+                        </button>
+                    </form>
+
+
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div>
+
     </div>
 {% endblock %}

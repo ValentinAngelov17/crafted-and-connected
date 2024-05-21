@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment, Like, SUBCATEGORY_CHOICES
+from .models import Post, Comment, Like
 from .forms import PostForm, CommentForm
 
 
@@ -21,14 +21,11 @@ def add_post(request):
 
 def load_subcategories(request):
     category = request.GET.get('category')
-    print(f"Category received: {category}")
-    subcategories = SUBCATEGORY_CHOICES.get(category, [])
-    print(f"Subcategories returned: {subcategories}")
+    subcategories = Post.SUBCATEGORY_CHOICES.get(category, [])
     return JsonResponse([{'value': subcategory[0], 'display': subcategory[1]} for subcategory in subcategories],
                         safe=False)
 
 
-# <!-- TODO:  <a href="{% url 'post_detail' post_id %}"> </a><!-->
 @login_required
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -41,7 +38,7 @@ def post_detail(request, post_id):
             comment.user = request.user
             comment.post = post
             comment.save()
-            return redirect('post_detail', post_id=post_id)
+            return redirect('post_detail', post=post)
     else:
         form = CommentForm()
 

@@ -51,11 +51,11 @@
         <div class="post-grid">
             {% for post in posts %}
                 <div class="post-item">
-                  <p>Post ID: {{ post.id }}</p> 
-                   
+                    <p>Post ID: {{ post.id }}</p>
+                    <a href="{% url 'post_detail' post.id %}">
                         <img style="width: 200px; height: 200px;" src="{{ post.photos.url }}" alt="post photos"
                              class="img-fluid">
-                    
+                    </a>
                 </div>
             {% empty %}
                 <p>No posts yet.</p>

@@ -1023,3 +1023,33 @@ li b {
     font-size: 12px;
     font-weight: bold;
 }
+/* Add this to your style.css
+.pin_container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card {
+    margin: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+/*
+.card img {
+    height: 200px;
+    width: 400px;
+}
+
+.card_small {
+    width: 150px;
+}
+
+.card_medium {
+    width: 250px;
+}
+
+.card_large {
+    width: 350px;
+}*/

@@ -19,7 +19,7 @@ def register(request):
 
 @require_GET
 def latest_posts(request, ):
-    posts = Post.objects.all().order_by('-created_at')[:10]
+    posts = Post.objects.all().order_by('-created_at')[:20]
     posts_data = [{
         'title': post.title,
         'image_url': post.photos.url,

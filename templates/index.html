@@ -63,24 +63,31 @@
         <h2>Най-нови предложения</h2>
     </header>
 </section>
-<div class="pin_container">
-    <div class="card card_small">
-        <a href="#"><img src="{% static "images/paper.jpg" %}" alt=""></a>
-    </div>
-    <div class="card card_medium"><img src="{% static "images/bijuta.jpg" %}" alt=""></div>
-    <div class="card card_large"><img src="{% static "images/durvo.jpg" %}" alt=""></div>
-    <div class="card card_medium"><img src="{% static  "images/goblen.jpg" %}" alt=""></div>
-    <div class="card card_small"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_large"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_medium"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_small"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_medium"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_small"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_medium"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_large"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_medium"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_small"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_medium"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
-    <div class="card card_large"><img src="{% static "images/kamuni.jpg" %}" alt=""></div>
+<div class="pin_container" id="latest-posts-container">
+    
 </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/latest-posts/')
+            .then(response => response.json())
+            .then(posts => {
+                const container = document.getElementById('latest-posts-container');
+                container.innerHTML = ''; // Clear any existing content
+                posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.classList.add('card');
+                    postElement.innerHTML = `
+                        <a href="${post.post_url}">
+                                <img src="${post.image_url}" alt="${post.title}">
+                            </a>
+                            
+                       
+                    `;
+                    container.appendChild(postElement);
+                });
+            })
+            .catch(error => console.error('Error fetching latest posts:', error));
+    });
+</script>
+    
 {% endblock %}

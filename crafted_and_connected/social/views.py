@@ -5,6 +5,7 @@ from .models import Post, Comment, Like
 from .forms import PostForm, CommentForm
 
 
+
 @login_required
 def add_post(request):
     if request.method == 'POST':

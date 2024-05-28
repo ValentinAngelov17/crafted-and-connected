@@ -8,17 +8,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <h1>Add a New Post</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add Post</button>
-    </form>
+
+
+    <div class="user-profile" >
+        <div><h1>Добавяне на нова публикация</h1></div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Post</button>
+        </form>
+    </div>
+
 
     <script>
-        $(document).ready(function() {
-            $('#id_category').change(function() {
+        $(document).ready(function () {
+            $('#id_category').change(function () {
                 var category = $(this).val();
                 var subcategorySelect = $('#id_subcategory');
                 subcategorySelect.empty();
@@ -29,7 +33,7 @@
                         data: {
                             'category': category
                         },
-                        success: function(data) {
+                        success: function (data) {
                             subcategorySelect.append('<option value="">Select a subcategory</option>');
                             for (var i = 0; i < data.length; i++) {
                                 subcategorySelect.append('<option value="' + data[i].value + '">' + data[i].display + '</option>');

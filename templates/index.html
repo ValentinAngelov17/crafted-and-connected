@@ -16,78 +16,59 @@
             Социална платформа за купуване и продаване на ръчно изработени изделия
         </h2>
     </header>
-    <div class="categories">
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/paper.jpg');"></div>
-            <span><a href="paper-search.html" style="color: white;">Изделия от хартия</a></span>
-        </button>
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/vosuk1.jpg');"></div>
-            <span>Изделия от восък</span>
-        </button>
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/durvo.jpg');"></div>
-            <span>Изделия от дърво</span>
-        </button>
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/keramia3.jpg');"></div>
-            <span>Керамични изделия</span>
-        </button>
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/goblen.jpg');"></div>
-            <span>Гоблени</span>
-        </button>
-    </div>
-    <div class="categories">
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/kartina.jpg');"></div>
-            <span>Картини</span>
-        </button>
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/biju.jpg');"></div>
-            <span>Бижута</span>
-        </button>
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/pletiva.jpg');"></div>
-            <span>Плетива</span>
-        </button>
-        <button class="category-btn">
-            <div class="category-background" style="background-image: url('static/images/kamuni.jpg');"></div>
-            <span>Други</span>
-        </button>
-    </div>
-    </div>
+<div class="categories">
+    
+{% for category_key, category_display in categories %}
+    <button class="category-btn">
+        <div class="category-background" style="background-image: url('static/images/{{ category_key }}.jpg');"></div>
+        <span><a href="{% url 'category_view' category_key %}" style="color: white;">{{ category_display }}</a></span>
+    </button>
+    {% if forloop.counter|divisibleby:5 %}
+            </div>
+            <div class="categories">
+        {% endif %}
+{% endfor %}
+</div>
+  
 </section>
 <section>
+
     <header class="top-header">
-        <h2>Най-нови предложения</h2>
+        <h2>Най-нови предложения </h2>
     </header>
 </section>
 <div class="pin_container" id="latest-posts-container">
     
 </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        fetch('/api/latest-posts/')
-            .then(response => response.json())
-            .then(posts => {
-                const container = document.getElementById('latest-posts-container');
-                container.innerHTML = ''; // Clear any existing content
-                posts.forEach(post => {
-                    const postElement = document.createElement('div');
-                    postElement.classList.add('card');
-                    postElement.innerHTML = `
-                        <a href="${post.post_url}">
+ <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/latest-posts/')
+                .then(response => response.json())
+                .then(posts => {
+                    const container = document.getElementById('latest-posts-container');
+                    container.innerHTML = ''; // Clear any existing content
+
+                    // Define possible classes
+                    const sizeClasses = ['card_small', 'card_medium', 'card_large'];
+
+                    posts.forEach(post => {
+                        const postElement = document.createElement('div');
+
+                        // Randomly select a size class
+                        const randomClass = sizeClasses[Math.floor(Math.random() * sizeClasses.length)];
+                        postElement.classList.add('card', randomClass);
+
+                        postElement.innerHTML = `
+                            <a href="${post.post_url}">
                                 <img src="${post.image_url}" alt="${post.title}">
                             </a>
                             
-                       
-                    `;
-                    container.appendChild(postElement);
-                });
-            })
-            .catch(error => console.error('Error fetching latest posts:', error));
-    });
-</script>
+                        `;
+                        container.appendChild(postElement);
+                    });
+                })
+                .catch(error => console.error('Error fetching latest posts:', error));
+        });
+    </script>
     
 {% endblock %}

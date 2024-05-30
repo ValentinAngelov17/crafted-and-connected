@@ -520,8 +520,8 @@ header {
 .post {
     display: flex;
     justify-content: center;
-    height: 800px;
     border-radius: 50px;
+    width: 100%;
 
 }
 
@@ -873,28 +873,19 @@ aside {
 /* categories */
 .categories-options {
     width: 300px;
-    height: 800px;
-    background-color: #e98f09;
+    background-color: #d5c1a3;
 }
 
 
-.categories-options ol {
-    display: block;
-    list-style-type: disc;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 40px;
-}
 
 .categories-options ul {
-    margin-left: 20px;
+    margin-left: 30px;
     list-style-type: circle;
 }
 
 .categories-options li {
     font-size: 20px;
+
 }
 
 li b {
@@ -906,13 +897,16 @@ li b {
 }
 
 .categories-list {
-    background-color: #d5c1a3;
+
     color: white;
     font-family: "Roboto Slab", serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
     padding-top: 10px;
+}
+.sidebar {
+    width: 300px;
 }
 
 .user-profile {
@@ -1053,3 +1047,17 @@ li b {
 .card_large {
     width: 350px;
 }*/
+
+.category-title {
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    text-align: center;
+    font-size: 28px;
+    color: white;
+    margin-top: 32px;
+    width: 100%;
+    background-color: #d5c1a3;
+
+}

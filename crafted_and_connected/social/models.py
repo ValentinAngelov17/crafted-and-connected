@@ -33,6 +33,7 @@ class Post(models.Model):
         ],
         'wax': [
             ('candles', _('Свещи')),
+            ('other', _('Други')),
         ],
         'wood': [
             ('decorations', _('Декорации')),
@@ -50,6 +51,7 @@ class Post(models.Model):
             ('finished', _('Готови')),
             ('patterns', _('Схеми')),
             ('stamped', _('Щампирани')),
+            ('other', _('Други')),
         ],
         'paintings': [
             ('portrait', _('Портретна живопис')),
@@ -59,11 +61,13 @@ class Post(models.Model):
             ('historical', _('Исторически живопис')),
             ('religious', _('Религиозна живопис')),
             ('allegory', _('Алегория')),
+            ('other', _('Други')),
         ],
         'jewelry': [
             ('earrings', _('Обеци')),
             ('necklaces', _('Колиета')),
             ('bracelets', _('Гривни')),
+            ('other', _('Други')),
         ],
         'knitting': [
             ('clothes', _('Дрехи')),

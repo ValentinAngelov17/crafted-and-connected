@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Post, Comment, Like
 from .forms import PostForm, CommentForm
+from ..authentication.models import Follow
 
 
 @login_required
@@ -31,6 +32,9 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     comments = post.comments.all()
     is_liked = post.likes.filter(id=request.user.id).exists()
+
+    is_following_post_user = Follow.objects.filter(follower=request.user, followed=post.user).exists()
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -47,9 +51,9 @@ def post_detail(request, post_id):
         'comments': comments,
         'is_liked': is_liked,
         'form': form,
+        'is_following_post_user': is_following_post_user,  # Include the variable in the context
     }
     return render(request, 'post_detail.html', context)
-
 
 @login_required
 def like_post(request, post_id):

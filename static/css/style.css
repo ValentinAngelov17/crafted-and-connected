@@ -582,7 +582,15 @@ header {
 .item1, .item2, .item3 {
     height: 30px;
 }
-
+.item1{
+    margin-top: 6px;
+}
+.item3{
+    margin-top: 8px;
+}
+.item2{
+    margin-top: 8px;
+}
 .item5 {
     grid-column-start: 1;
     grid-column-end: 2;
@@ -593,6 +601,7 @@ header {
     grid-column-end: 5;
 
 }
+
 
 .item12 {
     grid-column-start: 1;
@@ -1060,4 +1069,13 @@ li b {
     width: 100%;
     background-color: #d5c1a3;
 
+}
+.profile-buttons {
+    background-color: #ee4c4b;
+    color: white;
+    padding: 10px 5px;
+    border: 1px solid white;
+    border-radius: 30px;
+    width: 130px;
+    cursor: pointer;
 }

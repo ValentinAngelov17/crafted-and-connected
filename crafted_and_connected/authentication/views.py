@@ -58,20 +58,6 @@ def profile(request):
     return redirect('user_profile', user_id=user.id)
 
 
-@login_required
-def user_profile(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    posts = Post.objects.filter(user=user).order_by('-created_at')
-    post_count = posts.count()
-    followers_count = Follow.objects.filter(followed=user).count()
-    following_count = Follow.objects.filter(follower=user).count()
-    return render(request, 'profile.html', {
-        'user': user,
-        'followers_count': followers_count,
-        'following_count': following_count,
-        'posts': posts,
-        'post_count': post_count
-    })
 
 
 @login_required
@@ -95,3 +81,34 @@ def update_profile_picture(request):
         form = ProfilePictureForm(instance=request.user)
     return render(request, 'update_profile_picture.html', {'form': form})
 
+
+@login_required
+def user_profile(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    posts = Post.objects.filter(user=user).order_by('-created_at')
+    post_count = posts.count()
+    followers_count = Follow.objects.filter(followed=user).count()
+    following_count = Follow.objects.filter(follower=user).count()
+    is_following = Follow.objects.filter(follower=request.user, followed=user).exists()
+    return render(request, 'profile.html', {
+        'user': user,
+        'followers_count': followers_count,
+        'following_count': following_count,
+        'posts': posts,
+        'post_count': post_count,
+        'is_following': is_following,
+    })
+
+
+@login_required
+def follow_user(request, user_id):
+    user_to_follow = get_object_or_404(CustomUser, id=user_id)
+    follow, created = Follow.objects.get_or_create(follower=request.user, followed=user_to_follow)
+    return redirect(reverse('user_profile', args=[user_id]))
+
+
+@login_required
+def unfollow_user(request, user_id):
+    user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
+    Follow.objects.filter(follower=request.user, followed=user_to_unfollow).delete()
+    return redirect(reverse('user_profile', args=[user_id]))

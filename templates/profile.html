@@ -41,13 +41,24 @@
             <div>
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button class="after-login-buttons"
-                            style="background-color: #ee4c4b; color: white; margin: 16px;
-                         padding: 8px 20px; border: 1px solid white;border-radius: 30px; width: 130px; "
-                            type="submit">Изход
-                    </button>
+                    <button class="profile-buttons" type="submit">Изход</button>
                 </form>
             </div>
+        {% else %}
+            <div  class="buttons" style="margin-bottom: 20px;">
+                <a  class="after-login-buttons">Съобщение</a>
+            </div>
+            {% if not is_following %}
+                <form method="post" action="{% url 'follow_user' user.id %}">
+                    {% csrf_token %}
+                    <button class="profile-buttons" type="submit" style="margin-bottom: 20px;">Последвай</button>
+                </form>
+            {% else %}
+                <form method="post" action="{% url 'unfollow_user' user.id %}">
+                    {% csrf_token %}
+                    <button class="profile-buttons" type="submit" style="margin-bottom: 20px;">Отпоследвай</button>
+                </form>
+            {% endif %}
         {% endif %}
         <h2> {{ post_count }} Публикации</h2>
         <div class="post-grid">

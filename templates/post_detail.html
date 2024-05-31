@@ -20,7 +20,7 @@
         </div>
         <div class="post-decription">
             <div class="grid-container">
-                <div class="item1"><h3>{{ post.user.first_name }} {{ post.user.last_name }}</h3></div>
+                <div class="item1"><h3><a style="color: black;" href="{% url 'user_profile' post.user.id %}">{{ post.user.first_name }} {{ post.user.last_name }}</a></h3></div>
 
 
                 <div class="item11">

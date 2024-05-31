@@ -32,21 +32,23 @@
         </div>
 
         <div class="user-details" style="margin: 20px;"><p>Описание: {{ user.description }}</p></div>
-        <div class="buttons">
-            <a class="after-login-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
-        </div>
-        <div>
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button class="after-login-buttons"
-                        style="background-color: #ee4c4b; color: white; margin: 16px;
+        {% if request.user == user %}
+
+
+            <div class="buttons">
+                <a class="after-login-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
+            </div>
+            <div>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="after-login-buttons"
+                            style="background-color: #ee4c4b; color: white; margin: 16px;
                          padding: 8px 20px; border: 1px solid white;border-radius: 30px; width: 130px; "
-                        type="submit">Изход
-                </button>
-            </form>
-
-
-        </div>
+                            type="submit">Изход
+                    </button>
+                </form>
+            </div>
+        {% endif %}
         <h2> {{ post_count }} Публикации</h2>
         <div class="post-grid">
             {% for post in posts %}

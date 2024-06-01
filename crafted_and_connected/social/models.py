@@ -1,11 +1,10 @@
-from django.db import models
 from django.utils.translation import gettext_lazy as _
-# Create your models here.
 from django.db import models
+from django.contrib.auth import get_user_model
+from django.urls import reverse
 from django.conf import settings
 
-from django.db import models
-from django.conf import settings
+from crafted_and_connected.authentication.models import CustomUser
 
 
 # Define your choices for categories and subcategories
@@ -127,3 +126,19 @@ class Like(models.Model):
 
     def __str__(self):
         return f'Like by {self.user} on {self.post.title}'
+
+
+class Notification(models.Model):
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
+    content = models.CharField(max_length=255)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification for {self.recipient}: {self.content}"
+
+    @classmethod
+    def create_post_notification(cls, user, post):
+        content = f"User {user.first_name} {user.last_name} added a new post '{post.title}'"
+        return cls.objects.create(user=user, content=content)

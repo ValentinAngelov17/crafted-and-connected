@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'crafted_and_connected.social',
     'crafted_and_connected.authentication',
     'crafted_and_connected.messaging',
+    'crafted_and_connected.store.templatetags'
 ]
 
 MIDDLEWARE = [

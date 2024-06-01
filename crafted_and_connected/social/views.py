@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment, Like
+from .models import Post, Comment, Like, Notification
 from .forms import PostForm, CommentForm
 from ..authentication.models import Follow
 
@@ -14,6 +14,17 @@ def add_post(request):
             post = form.save(commit=False)
             post.user = request.user
             post.save()
+
+            # Notify followers about the new post
+            followers = Follow.objects.filter(followed=request.user)
+            for follower_relation in followers:
+                follower = follower_relation.follower
+                Notification.objects.create(
+                    recipient=follower,
+                    content=f"User {request.user.first_name} {request.user.last_name} added a new post '{post.title}'",
+                    post=post
+                )
+
             return redirect('profile')
     else:
         form = PostForm()
@@ -55,6 +66,7 @@ def post_detail(request, post_id):
     }
     return render(request, 'post_detail.html', context)
 
+
 @login_required
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -72,3 +84,17 @@ def add_comment(request, post_id):
         text = request.POST.get('text')
         comment = Comment.objects.create(user=request.user, post=post, text=text)
         return redirect('post_detail', post_id=post_id)
+
+
+@login_required
+def notifications(request):
+    notifications = request.user.notifications.all()
+    return render(request, 'notifications.html', {'notifications': notifications})
+
+
+@login_required
+def mark_notification_as_read(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id, recipient=request.user)
+    notification.read = True
+    notification.save()
+    return redirect('notifications')

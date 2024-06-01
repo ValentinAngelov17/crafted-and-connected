@@ -12,6 +12,7 @@ def index(request):
     context = {
         'categories': categories,
     }
+
     return render(request, 'index.html', context)
 
 

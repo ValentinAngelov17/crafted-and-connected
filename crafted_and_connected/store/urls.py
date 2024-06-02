@@ -9,4 +9,9 @@ urlpatterns = [
     path('category/<str:category>/', views.category_view, name='category_view'),
     path('category/<str:category>/<str:subcategory>/', views.category_view, name='subcategory_view'),
     path('search/', views.search, name='search'),
+    path('add_to_cart/<int:post_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/', views.view_cart, name='view_cart'),
+    path('increase_quantity/<int:item_id>/', views.increase_quantity, name='increase_quantity'),
+    path('decrease_quantity/<int:item_id>/', views.decrease_quantity, name='decrease_quantity'),
+    path('remove_item/<int:item_id>/', views.remove_item, name='remove_item'),
 ]

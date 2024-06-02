@@ -49,7 +49,7 @@
         </div>
     {% endif %}
     <div class="buttons">
-        <a href="#" class="shopping-cart"><i class="fas fa-shopping-cart"></i></a>
+        <a href="{% url 'view_cart' %}" class="shopping-cart"><i class="fas fa-shopping-cart"></i></a>
     </div>
     <div class="buttons">
         {% if request.user.is_authenticated %}

@@ -68,12 +68,14 @@
                     Цена: {{ post.price }} лв
                 </div>
                 <div class="buttons">
-                    <a href="">Купи</a>
+                     <a href="{% url 'add_to_cart' post.id %}">Купи</a>
                 </div>
 
             </div>
             <div class="comments">
-                <h3 style="padding-left: 20px;">Коментари:</h3>
+                {% if comments %}
+                    <h3 style="padding-left: 20px;">Коментари:</h3>
+                {% endif %}
                 <ul>
                     {% for comment in comments %}
                         <li style="font-size: 22px; padding-left: 10px;">
@@ -143,4 +145,27 @@
     <div>
 
     </div>
+    <script>
+        document.getElementById('buy-link').addEventListener('click', function (event) {
+            event.preventDefault();
+            var postId = this.getAttribute('data-post-id');
+            var url = "{% url 'add_to_cart' post_id=0 %}".replace('0', postId);
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': "{{ csrf_token }}",
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle success or error response
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
 {% endblock %}

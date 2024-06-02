@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_GET
 from django.urls import reverse
 from django.db.models import Q
 from crafted_and_connected.social.models import Post
+from crafted_and_connected.store.models import Cart, CartItem
 
 
 # Create your views here.
@@ -61,3 +63,52 @@ def search(request):
         )
 
     return render(request, 'search_results.html', {'query': query, 'results': results})
+
+
+def add_to_cart(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    # Check if the item is already in the cart
+    existing_item = cart.items.filter(post=post).first()
+    if existing_item:
+        # If the item is already in the cart, increment the quantity
+        existing_item.quantity += 1
+        existing_item.save()
+    else:
+        # If the item is not in the cart, create a new cart item
+        CartItem.objects.create(cart=cart, post=post, quantity=1)
+    return redirect('view_cart')
+
+
+@login_required
+def view_cart(request):
+    cart = Cart.objects.filter(user=request.user).first()
+    if cart:
+        print(f"Cart ID: {cart.id}, Total: {cart.get_total_price()}")
+    return render(request, 'cart.html', {'cart': cart})
+
+
+@login_required
+def increase_quantity(request, item_id):
+    item = get_object_or_404(CartItem, pk=item_id, cart__user=request.user)
+    item.quantity += 1
+    item.save()
+    return redirect('view_cart')
+
+
+@login_required
+def decrease_quantity(request, item_id):
+    item = get_object_or_404(CartItem, pk=item_id, cart__user=request.user)
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.save()
+    else:
+        item.delete()
+    return redirect('view_cart')
+
+
+@login_required
+def remove_item(request, item_id):
+    item = get_object_or_404(CartItem, pk=item_id, cart__user=request.user)
+    item.delete()
+    return redirect('view_cart')

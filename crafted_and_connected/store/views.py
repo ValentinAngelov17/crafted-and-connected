@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
 from django.urls import reverse
-
+from django.db.models import Q
 from crafted_and_connected.social.models import Post
 
 
@@ -51,29 +51,13 @@ def category_view(request, category, subcategory=None):
     return render(request, 'category.html', context)
 
 
-"""
-def category_view(request, category=None, subcategory=None):
-    if category and subcategory:
-        posts = Post.objects.filter(category=category, subcategory=subcategory)
-    elif category:
-        posts = Post.objects.filter(category=category)
-    else:
-        posts = Post.objects.all()
+def search(request):
+    query = request.GET.get('q')
+    results = []
 
-    category_choices = Post.CATEGORY_CHOICES
-    subcategories = {cat[0]: [] for cat in category_choices}
-    for item in Post.SUBCATEGORY_CHOICES:
-        cat, subcat = item[:2]  # Ensure we only unpack the first two elements
-        if cat in subcategories:
-            subcategories[cat].append(subcat)
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
 
-    context = {
-        'posts': posts,
-        'category': category,
-        'subcategory': subcategory,
-        'category_choices': category_choices,
-        'subcategories': subcategories,
-    }
-    return render(request, 'index.html', context)
-
-"""
+    return render(request, 'search_results.html', {'query': query, 'results': results})

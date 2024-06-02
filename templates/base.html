@@ -25,9 +25,12 @@
             <a href="{% url 'add_post' %}" class="after-login-buttons">Добави</a>
         </div>
     {% endif %}
+   
     <div class="search">
-        <input type="text" placeholder="Търси...">
-        <button type="submit"><i class="fas fa-search"></i></button>
+        <form action="{% url 'search' %}" method="get">
+            <input type="text" name="q" placeholder="Търси...">
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
     </div>
     {% if request.user.is_authenticated %}
         <div class="buttons">

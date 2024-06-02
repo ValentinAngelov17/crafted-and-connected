@@ -35,13 +35,13 @@
         {% if request.user == user %}
 
 
-            <div class="buttons">
+            <div class="buttons" style="margin-bottom: 20px;">
                 <a class="after-login-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
             </div>
             <div>
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button class="profile-buttons" type="submit">Изход</button>
+                    <button style="margin-bottom: 20px;" class="profile-buttons" type="submit">Изход</button>
                 </form>
             </div>
         {% else %}

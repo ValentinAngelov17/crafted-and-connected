@@ -80,7 +80,7 @@ body {
 }
 
 .top-header h1 {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 nav {
@@ -125,12 +125,10 @@ nav {
 }
 
 .buttons a.shopping-cart {
-    /* Your CSS styles for the shopping cart icon */
-    font-size: 20px; /* Example size change */
+    font-size: 20px;
     color: #ee4c4b;
     background-color: #f8f2e9;
-    border: #f8f2e9 /* Example color change */
-    /* Add any other styles you want to apply */
+    border: #f8f2e9
 }
 
 .buttons .after-login-buttons {

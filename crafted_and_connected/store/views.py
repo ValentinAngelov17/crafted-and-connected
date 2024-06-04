@@ -5,6 +5,7 @@ from django.views.decorators.http import require_GET
 from django.urls import reverse
 from django.db.models import Q
 from crafted_and_connected.social.models import Post
+from crafted_and_connected.store.forms import CheckoutForm
 from crafted_and_connected.store.models import Cart, CartItem
 
 
@@ -112,3 +113,31 @@ def remove_item(request, item_id):
     item = get_object_or_404(CartItem, pk=item_id, cart__user=request.user)
     item.delete()
     return redirect('view_cart')
+
+
+@login_required
+def checkout(request):
+    cart = Cart.objects.filter(user=request.user).first()
+    if not cart or not cart.items.all():
+        return redirect('view_cart')
+
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            delivery_option = request.POST.get('delivery')
+            # Save billing details and proceed to payment or order confirmation
+            # Here you can handle the order saving logic
+            # e.g., create an Order model instance and save the order details
+            # For now, we just redirect to a 'thank you' page or order summary
+            return render(request, 'order_summary.html', {
+                'cart': cart,
+                'delivery_option': delivery_option,
+                'billing_details': form.cleaned_data
+            })
+    else:
+        form = CheckoutForm(initial={
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name
+        })
+
+    return render(request, 'checkout.html', {'cart': cart, 'form': form})

@@ -1,22 +1,38 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <h1>Order Summary</h1>
-    <h2>Items in Cart:</h2>
-    <ul>
-        {% for item in cart.items.all %}
-            <li>
-                {{ item.post.title }} - 
-                Quantity: {{ item.quantity }} - 
-                Price: {{ item.post.price|floatformat:2 }} - 
-                Subtotal: {{ item.post.price|floatformat:2|add:item.quantity|floatformat:2 }}
-            </li>
-        {% endfor %}
-    </ul>
-    <h2>Total: {{ cart.get_total_price|floatformat:2 }}</h2>
-    <h3>Selected Delivery Option: {{ delivery_option|title }}</h3>
-    <h3>Billing Details:</h3>
-    <p>First Name: {{ billing_details.first_name }}</p>
-    <p>Last Name: {{ billing_details.last_name }}</p>
-    <p>Billing Address: {{ billing_details.billing_address }}</p>
-    <p>Your order will be delivered via {{ delivery_option|title }}.</p>
+    <div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
+        <a href="{% url 'checkout' %}"> Назад </a>
+        <h1>Потвърждение</h1>
+        <h2>Продукти:</h2>
+        <ul>
+            {% for item in cart.items.all %}
+                <li>
+                    {{ item.post.title }} - 
+                    Количество: {{ item.quantity }} -
+                    Цена: {{ item.post.price|floatformat:2 }} 
+                </li>
+            {% endfor %}
+        </ul>
+        <h2>Общо: {{ cart.get_total_price|floatformat:2 }}лв.</h2>
+        <h3>Вашата поръчка ще бъде доставена от: {{ delivery_option|title }}</h3>
+        <h3>Данни:</h3>
+        <p>Име: {{ billing_details.first_name }}</p>
+        <p>Фамилия: {{ billing_details.last_name }}</p>
+        <p>Телефонен номер: {{ billing_details.phone_number }}</p>
+        <p>Email: {{ billing_details.email }}</p>
+        <p>Адрес: {{ billing_details.billing_address }}</p>
+        <h2>Крайна цена с доставка: {{ cart.total_price_with_delivery|floatformat:2 }}лв.</h2>
+        
+        <!-- Form to create order -->
+        <form action="{% url 'create_order' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="delivery_option" value="{{ delivery_option }}">
+            <input type="hidden" name="first_name" value="{{ billing_details.first_name }}">
+            <input type="hidden" name="last_name" value="{{ billing_details.last_name }}">
+            <input type="hidden" name="phone_number" value="{{ billing_details.phone_number }}">
+            <input type="hidden" name="email" value="{{ billing_details.email }}">
+            <input type="hidden" name="billing_address" value="{{ billing_details.billing_address }}">
+            <button type="submit">Create Order</button>
+        </form>
+    </div>
 {% endblock %}

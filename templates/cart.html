@@ -31,7 +31,7 @@
             {% endfor %}
 
             <h2 style="border-top-style: solid; margin-bottom: 12px;">Общо: {{ cart.get_total_price|floatformat:2 }}</h2>
-            <form action="{% url 'checkout' %}" method="post">
+            <form action="{% url 'view_cart' %}" method="post">
             {% csrf_token %}
             
             <br>

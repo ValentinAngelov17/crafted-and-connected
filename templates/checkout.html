@@ -30,7 +30,7 @@
                     <input type="radio" name="delivery" value="speedy" required> Speedy
                 </label>
                 <br><br>
-                <h2 style="margin: 12px;">Обща цена с доставка: {{ cart.total_price_with_delivery|floatformat:2 }} лв.</h2>
+                <h2 style="margin: 12px;">Обща цена с доставка: {{ total_sum }} лв.</h2>
                 <h3>Данни за доставка:</h3>
                 <div style="min-width: 350px; max-width: 450px; margin: auto;" class="cart-info">
                     {{ form.as_p }}

@@ -1,28 +1,27 @@
 {% extends 'base.html' %}
 {% block page_content %}
     <div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
-        <a href="{% url 'checkout' %}"> Назад </a>
         <h1>Потвърждение</h1>
         <h2>Продукти:</h2>
         <ul>
             {% for item in cart.items.all %}
-                <li>
-                    {{ item.post.title }} - 
+                <li class="order-data">
+                    {{ item.post.title }} -
                     Количество: {{ item.quantity }} -
-                    Цена: {{ item.post.price|floatformat:2 }} 
+                    Цена: {{ item.post.price|floatformat:2 }}
                 </li>
             {% endfor %}
         </ul>
         <h2>Общо: {{ cart.get_total_price|floatformat:2 }}лв.</h2>
         <h3>Вашата поръчка ще бъде доставена от: {{ delivery_option|title }}</h3>
         <h3>Данни:</h3>
-        <p>Име: {{ billing_details.first_name }}</p>
-        <p>Фамилия: {{ billing_details.last_name }}</p>
-        <p>Телефонен номер: {{ billing_details.phone_number }}</p>
-        <p>Email: {{ billing_details.email }}</p>
-        <p>Адрес: {{ billing_details.billing_address }}</p>
+        <p class="order-data">Име: {{ billing_details.first_name }}</p>
+        <p class="order-data">Фамилия: {{ billing_details.last_name }}</p>
+        <p class="order-data">Телефонен номер: {{ billing_details.phone_number }}</p>
+        <p class="order-data">Email: {{ billing_details.email }}</p>
+        <p class="order-data">Адрес: {{ billing_details.billing_address }}</p>
         <h2>Крайна цена с доставка: {{ cart.total_price_with_delivery|floatformat:2 }}лв.</h2>
-        
+
         <!-- Form to create order -->
         <form action="{% url 'create_order' %}" method="post">
             {% csrf_token %}
@@ -32,7 +31,8 @@
             <input type="hidden" name="phone_number" value="{{ billing_details.phone_number }}">
             <input type="hidden" name="email" value="{{ billing_details.email }}">
             <input type="hidden" name="billing_address" value="{{ billing_details.billing_address }}">
-            <button type="submit">Create Order</button>
+            <button class="profile-buttons" style="width: 200px; " type="submit">Създай поръчка</button>
         </form>
+        <div class="buttons" style="margin: 20px 0; padding-bottom: 20px;"><a  href="{% url 'checkout' %}"> Назад </a></div>
     </div>
 {% endblock %}

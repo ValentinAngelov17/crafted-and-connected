@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
+    <h1>История на поръчките</h1>
+    {% if orders %}
+        <ul>
+            {% for order in orders %}
+                <li>
+                    <h2>Поръчка №{{ order.id }} - {{ order.created_at|date:"d M Y" }}</h2>
+                    <p>Статус: {{ order.order_status }}</p>
+                    <p>Продукти: {{ order.items }}</p>
+                    <p>Обща цена: {{ order.total_price }} лв.</p>
+                    <p>Доставка: {{ order.delivery_option|title }}</p>
+                <p>{{ order.billing_address }}</p>
+                <p>{{ order.phone_number }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Нямате направени поръчки.</p>
+    {% endif %}
+</div>
+{% endblock %}

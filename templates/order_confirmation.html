@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load items_filter %}
+<!-- Load the custom filter -->
+
+{% block page_content %}
+    <div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
+        <h1>Поръчката ви е създадена!</h1>
+        {% for order in orders %}
+            <h3>Номер на поръчката: {{ order.id }}</h3>
+            <h2>Детайли:</h2>
+            <p class="order-data">Име: {{ order.first_name }}</p>
+            <p class="order-data">Фамилия: {{ order.last_name }}</p>
+            <p class="order-data">Телефонен номер: {{ order.phone_number }}</p>
+            <p class="order-data">Email: {{ order.email }}</p>
+            <p class="order-data">Адрес: {{ order.billing_address }}</p>
+            <h2>Продукти:</h2>
+            <ul>
+                {% if order.items %}
+                    {% for item in order.items|split %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li>Няма налични продукти.</li>
+                {% endif %}
+            </ul>
+            <h2>Обща цена: {{ order.total_price|floatformat:2 }} лв.</h2>
+            <h3>Доставчик: {{ order.delivery_option|title }}</h3>
+        {% endfor %}
+
+    </div>
+{% endblock %}

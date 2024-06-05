@@ -1,7 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.conf import settings
-from crafted_and_connected.social.models import Post
 from django.utils.translation import gettext_lazy as _
+
+User = get_user_model()
 
 
 # Create your models here.
@@ -25,7 +27,7 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey('social.Post', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
@@ -41,17 +43,17 @@ class Order(models.Model):
         ('delivered', _('Delivered'))
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.TextField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    delivery_option = models.CharField(max_length=50)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    delivery_option = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField()
-    billing_address = models.TextField()
-    order_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    billing_address = models.CharField(max_length=255)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Order #{self.pk}"
+        return f"Order #{self.id} by {self.user}"

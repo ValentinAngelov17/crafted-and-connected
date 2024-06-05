@@ -39,14 +39,18 @@
                 <a class="after-login-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
             </div>
             <div>
+                <a href="{% url 'order_history' %}" class="profile-buttons"
+                   style="width: 200px; font-size: 16px; margin-top: 20px">История на поръчките</a>
+            </div>
+            <div>
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
                     <button style="margin-bottom: 20px;" class="profile-buttons" type="submit">Изход</button>
                 </form>
             </div>
         {% else %}
-            <div  class="buttons" style="margin-bottom: 20px;">
-                <a  class="after-login-buttons">Съобщение</a>
+            <div class="buttons" style="margin-bottom: 20px;">
+                <a class="after-login-buttons">Съобщение</a>
             </div>
             {% if not is_following %}
                 <form method="post" action="{% url 'follow_user' user.id %}">

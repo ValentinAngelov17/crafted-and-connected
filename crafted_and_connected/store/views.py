@@ -1,12 +1,17 @@
+from collections import defaultdict
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_GET
 from django.urls import reverse
 from django.db.models import Q
-from crafted_and_connected.social.models import Post
+from crafted_and_connected.social.models import Post, Notification
 from crafted_and_connected.store.forms import CheckoutForm
 from crafted_and_connected.store.models import Cart, CartItem, Order
+from decimal import Decimal
 
 
 # Create your views here.
@@ -116,18 +121,41 @@ def remove_item(request, item_id):
     return redirect('view_cart')
 
 
+User = get_user_model()
+
+from collections import defaultdict
+
+
 @login_required
 def checkout(request):
     cart = Cart.objects.filter(user=request.user).first()
     if not cart or not cart.items.all():
         return redirect('view_cart')
 
+    # Calculate total sum and total delivery sum
+    total_sum = Decimal(0)  # Initialize as Decimal
+    total_delivery_sum = Decimal(0)  # Init
+    items_by_user = defaultdict(list)
+    for item in cart.items.all():
+        items_by_user[item.post.user].append(item)
+
+    for user, items in items_by_user.items():
+        order_items_sum = sum(item.post.price * item.quantity for item in items)
+        total_sum += order_items_sum
+        total_delivery_sum += Decimal(4.50)
+    cart_sum = total_sum
+    total_sum += total_delivery_sum
+
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
             delivery_option = request.POST.get('delivery')
+
             return render(request, 'order_summary.html', {
                 'cart': cart,
+                'total_sum': total_sum,
+                'total_delivery_sum': total_delivery_sum,
+                'cart_sum': cart_sum,
                 'delivery_option': delivery_option,
                 'billing_details': form.cleaned_data,
             })
@@ -139,43 +167,62 @@ def checkout(request):
         }
         form = CheckoutForm(initial=initial_data)
 
-    return render(request, 'checkout.html', {'cart': cart, 'form': form})
+    return render(request, 'checkout.html',
+                  {'cart': cart, 'total_sum': total_sum, 'total_delivery_sum': total_delivery_sum, 'cart_sum': cart_sum,
+                   'form': form})
 
 
 @login_required
 def create_order(request):
     if request.method == 'POST':
-        cart = Cart.objects.filter(user=request.user).first()
-        if not cart:
-            return redirect('view_cart')
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            cart = Cart.objects.get(user=request.user)
+            items_by_user = defaultdict(list)
 
-        delivery_option = request.POST.get('delivery_option')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        phone_number = request.POST.get('phone_number')
-        email = request.POST.get('email')
-        billing_address = request.POST.get('billing_address')
+            # Group items by the user who owns the post
+            for item in cart.items.all():
+                items_by_user[item.post.user].append(item)
 
-        # Check if all necessary data is available
-        if not all([delivery_option, first_name, last_name, phone_number, email, billing_address]):
-            return redirect('checkout')  # Redirect back to checkout if any data is missing
+            orders = []
+            delivery_charge = Decimal('4.50')  # Define a fixed delivery charge
 
-        items = ", ".join([f"{item.post.title} (Quantity: {item.quantity})" for item in cart.items.all()])
-        total_price = cart.total_price_with_delivery()  # Adding delivery cost
+            for user, items in items_by_user.items():
+                order_items = ", ".join([f"{item.post.title} (Quantity: {item.quantity})" for item in items])
+                total_price = sum(item.post.price * item.quantity for item in items) + delivery_charge
+                order = Order.objects.create(
+                    user=request.user,
+                    items=order_items,
+                    total_price=total_price,
+                    delivery_option=request.POST.get('delivery_option', 'default_option'),
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                    phone_number=form.cleaned_data['phone_number'],
+                    email=form.cleaned_data['email'],
+                    billing_address=form.cleaned_data['billing_address'],
+                )
+                orders.append(order)
 
-        order = Order.objects.create(
-            user=request.user,
-            items=items,
-            total_price=total_price,
-            delivery_option=delivery_option,
-            first_name=first_name,
-            last_name=last_name,
-            phone_number=phone_number,
-            email=email,
-            billing_address=billing_address,
-        )
+                # Create notification for the seller
+                Notification.create_notification(user, f'User {request.user.username} placed a new order', order=order)
 
-        return render(request, 'order_confirmation.html', {'order': order})
+            # Notify sellers
+            sellers = set(item.post.user for item in cart.items.all())
+            for seller in sellers:
+                for item in cart.items.all():
+                    content = f"{request.user.first_name} {request.user.last_name} ordered items from you."
+                    Notification.objects.create(recipient=seller, content=content, post=item.post)
+
+            # Clear the cart
+            cart.items.all().delete()
+
+            # Pass the orders list to the template
+            return render(request, 'order_confirmation.html', {'orders': orders})
 
     return redirect('checkout')
 
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'order_history.html', {'orders': orders})

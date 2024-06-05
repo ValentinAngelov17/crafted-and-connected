@@ -125,6 +125,7 @@ def checkout(request):
         form = CheckoutForm(request.POST)
         if form.is_valid():
             delivery_option = request.POST.get('delivery')
+
             # Save billing details and proceed to payment or order confirmation
             # Here you can handle the order saving logic
             # e.g., create an Order model instance and save the order details
@@ -132,7 +133,7 @@ def checkout(request):
             return render(request, 'order_summary.html', {
                 'cart': cart,
                 'delivery_option': delivery_option,
-                'billing_details': form.cleaned_data
+                'billing_details': form.cleaned_data,
             })
     else:
         form = CheckoutForm(initial={

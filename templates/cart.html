@@ -33,15 +33,7 @@
             <h2 style="border-top-style: solid; margin-bottom: 12px;">Общо: {{ cart.get_total_price|floatformat:2 }}</h2>
             <form action="{% url 'checkout' %}" method="post">
             {% csrf_token %}
-            <h3 style="margin-top: 14px;">Избери фирма за доставка:</h3>
-            <label>
-                <img style="width: 100px; height: 50px;" src="{% static 'images/b_0060448ceeae550b7d8f20ee471ee34d.png' %}" alt="">
-                <input type="radio" name="delivery" value="econt" required> Еконт
-            </label>
-            <label>
-                <img style="width: 100px; height: 50px;" src="{% static 'images/speedy-logo-4c--cmyk.jpg' %}" alt="">
-                <input type="radio" name="delivery" value="speedy" required> Speedy
-            </label>
+            
             <br>
                  <br><br>
             <h3>Billing Details:</h3>

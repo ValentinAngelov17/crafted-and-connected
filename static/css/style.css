@@ -1102,3 +1102,15 @@ li b {
     overflow-wrap: break-word;
     line-height: 1.5;
 }
+.cart-info p input, textarea {
+    width: 90%;
+    padding: 12px;
+    border-radius: 50px;
+}
+
+.cart-info ul li{
+    display: none;
+}
+.cart-info p {
+    font-size: 20px;
+}

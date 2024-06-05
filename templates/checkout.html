@@ -1,38 +1,46 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block page_content %}
     <body>
-    <div class="user-profile">
-     <h1>Checkout</h1>
-    {% if cart and cart.items.all %}
-        <h2>Order Summary:</h2>
-        <ul>
-            {% for item in cart.items.all %}
-                <li>
-                    {{ item.post.title }} - 
-                    Quantity: {{ item.quantity }} - 
-                    Price: {{ item.post.price|floatformat:2 }} - 
-                    Subtotal: {{ item.post.price|floatformat:2|add:item.quantity|floatformat:2 }}
-                </li>
-            {% endfor %}
-        </ul>
-        <h2>Total: {{ cart.get_total_price|floatformat:2 }}</h2>
-        <form action="{% url 'checkout' %}" method="post">
-            {% csrf_token %}
-            <h3>Select Delivery Option:</h3>
-            <label>
-                <input type="radio" name="delivery" value="econt" required> Econt
-            </label>
-            <label>
-                <input type="radio" name="delivery" value="speedy" required> Speedy
-            </label>
-            <br><br>
-            <h3>Billing Details:</h3>
-            {{ form.as_p }}
-            <button type="submit">Continue</button>
-        </form>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
+    <div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
+        <h1 style="padding: 20px 0;">Данни за доставка</h1>
+        {% if cart and cart.items.all %}
+            <h2>Продукти:</h2>
+            <ul>
+                {% for item in cart.items.all %}
+                    <li style="font-size: 20px;">
+                        {{ item.post.title }} -
+                        Количество: {{ item.quantity }} -
+                        Цена: {{ item.post.price|floatformat:2 }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <h2>Общо: {{ cart.get_total_price|floatformat:2 }} лв.</h2>
+            <form action="{% url 'checkout' %}" method="post">
+                {% csrf_token %}
+                <h3 style="margin: 14px 0;">Избери фирма за доставка:</h3>
+                <label>
+                    <img style="width: 100px; height: 50px;"
+                         src="{% static 'images/b_0060448ceeae550b7d8f20ee471ee34d.png' %}" alt="">
+                    <input type="radio" name="delivery" value="econt" required> Еконт
+                </label>
+                <label>
+                    <img style="width: 100px; height: 50px;" src="{% static 'images/speedy-logo-4c--cmyk.jpg' %}"
+                         alt="">
+                    <input type="radio" name="delivery" value="speedy" required> Speedy
+                </label>
+                <br><br>
+                <h2 style="margin: 12px;">Обща цена с доставка: {{ cart.total_price_with_delivery|floatformat:2 }} лв.</h2>
+                <h3>Данни за доставка:</h3>
+                <div style="min-width: 350px; max-width: 450px; margin: auto;" class="cart-info">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="profile-buttons" style="width: 200px; font-size: 16px; margin-bottom: 30px; margin-top: 30px">Continue</button>
+            </form>
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+    
     </div>
     </body>
 {% endblock %}

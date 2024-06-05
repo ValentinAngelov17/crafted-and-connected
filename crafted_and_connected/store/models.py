@@ -16,6 +16,12 @@ class Cart(models.Model):
         print(f"Calculating total price for cart {self.id}: {total}")
         return total
 
+    def total_price_with_delivery(self):
+        total = float(sum(item.post.price * item.quantity for item in self.items.all()))
+        total += 4.5
+        print(f"Calculating total price for cart {self.id}: {total}")
+        return total
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')

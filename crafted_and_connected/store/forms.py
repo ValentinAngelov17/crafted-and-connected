@@ -9,7 +9,9 @@ class AddToCartForm(forms.ModelForm):
 
 
 class CheckoutForm(forms.Form):
-    first_name = forms.CharField(max_length=100, label='First Name')
-    last_name = forms.CharField(max_length=100, label='Last Name')
+    first_name = forms.CharField(max_length=100, label='Име')
+    last_name = forms.CharField(max_length=100, label='Фамилия')
     email = forms.EmailField(max_length=100, label='Email')
-    billing_address = forms.CharField(widget=forms.Textarea, label='Billing Address')
+    phone_number = forms.CharField(max_length=10, min_length=10, label='Телефонен номер')
+    billing_address = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 30}), label='Адрес за доставка')
+

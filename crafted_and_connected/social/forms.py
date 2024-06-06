@@ -11,9 +11,18 @@ class PostForm(forms.ModelForm):
     subcategory = forms.ChoiceField(choices=[], required=True)
 
     def __init__(self, *args, **kwargs):
+
         super(PostForm, self).__init__(*args, **kwargs)
         self.fields['category'].choices = Post.CATEGORY_CHOICES
         self.fields['subcategory'].choices = []
+        self.fields['category'].label = 'Категория'
+        self.fields['subcategory'].label = 'Категория'
+
+        self.fields['title'].label = "Заглавие:"
+        self.fields['description'].label = "Описание:"
+        self.fields['price'].label = "Цена:"
+        self.fields['delivery_time'].label = "Време за доставка(дни)"
+        self.fields['photos'].label = "Качване на снимка:"
 
         if 'category' in self.data:
             try:
@@ -31,5 +40,5 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['text']
         widgets = {
-            'text': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Добави коментар...'})
+            'text': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Добави коментар...'}, )
         }

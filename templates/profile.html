@@ -33,19 +33,18 @@
 
         <div class="user-details" style="margin: 20px;"><p>Описание: {{ user.description }}</p></div>
         {% if request.user == user %}
-
-
-            <div class="buttons" style="margin-bottom: 20px;">
-                <a class="after-login-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
+            
+            <div style="height: 40px; margin-bottom: 12px;">
+                <a class="profile-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
             </div>
-            <div>
+            <div style="height: 40px;">
                 <a href="{% url 'order_history' %}" class="profile-buttons"
-                   style="width: 200px; font-size: 16px; margin-top: 20px">История на поръчките</a>
+                   style="width: 200px; font-size: 16px; margin: 40px 0;">История на поръчките</a>
             </div>
             <div>
-                <form action="{% url 'logout' %}" method="post">
+                <form style="height: 40px; margin-bottom: 20px;" action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button style="margin-bottom: 20px;" class="profile-buttons" type="submit">Изход</button>
+                    <button style="margin-bottom: 30px; margin-top: 0;" class="profile-buttons" type="submit">Изход</button>
                 </form>
             </div>
         {% else %}
@@ -68,7 +67,7 @@
         <div class="post-grid">
             {% for post in posts %}
                 <div class="post-item">
-                    <p>Post ID: {{ post.id }}</p>
+                    
                     <a href="{% url 'post_detail' post.id %}">
                         <img style="width: 200px; height: 200px;" src="{{ post.photos.url }}" alt="post photos"
                              class="img-fluid">

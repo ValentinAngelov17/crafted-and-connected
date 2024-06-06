@@ -29,7 +29,7 @@
                     {% if not is_following_post_user %}
                         <form method="post" action="{% url 'follow_user' post.user.id %}">
                             {% csrf_token %}
-                            <button class="profile-buttons" type="submit">Последвай</button>
+                            <button class="profile-buttons" style="margin: 0; font-size: 18px;" type="submit">Последвай</button>
                         </form>
                     {% else %}
                         <form method="post" action="{% url 'unfollow_user' post.user.id %}">
@@ -131,8 +131,8 @@
                     <form class="comment-form" method="POST">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button class="comment-btn" type="submit"
-                                style="height: 50px; color: #fff; text-decoration: none;">
+                        <button class="profile-buttons" type="submit"
+                                style="font-size: 18px; margin: 0;">
                             Добави коментар
                         </button>
                     </form>

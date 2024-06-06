@@ -10,12 +10,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
-    <div class="user-profile" >
-        <div><h1>Добавяне на нова публикация</h1></div>
+    <div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
+        <div><h1 style="padding: 20px 0;">Добавяне на нова публикация</h1></div>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Add Post</button>
+            <div style="min-width: 350px; max-width: 450px; margin: auto;" class="cart-info">
+                {{ form.as_p }}
+            </div>
+            <button class="profile-buttons" type="submit" style="margin-top: 20px; width: 150px; font-size: 20px;">Добави публикация</button>
         </form>
     </div>
 

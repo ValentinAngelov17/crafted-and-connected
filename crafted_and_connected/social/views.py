@@ -88,7 +88,8 @@ def add_comment(request, post_id):
 
 @login_required
 def notifications(request):
-    notifications = request.user.notifications.all()
+    user = request.user
+    notifications = Notification.objects.filter(recipient=user).order_by('-timestamp')
     return render(request, 'notifications.html', {'notifications': notifications})
 
 
@@ -98,7 +99,16 @@ def mark_notification_as_read(request, notification_id):
     notification.read = True
     notification.save()
     return redirect('notifications')
+
+
 def create_order_status_notification(order):
     content = f"Order #{order.id} status has changed to {order.get_status_display()}."
     recipient = order.user  # Assuming the order has a 'user' field that links to the User model
     Notification.objects.create(recipient=recipient, content=content, order=order)
+
+
+@login_required
+def clear_notifications(request):
+    user = request.user
+    Notification.objects.filter(recipient=user).delete()
+    return redirect('notifications')

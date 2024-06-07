@@ -1,6 +1,7 @@
 # social urls
 from django.urls import path
-from .views import add_post, load_subcategories, post_detail, like_post, add_comment, notifications, mark_notification_as_read
+from .views import add_post, load_subcategories, post_detail, like_post, add_comment, notifications, \
+    mark_notification_as_read, clear_notifications
 
 urlpatterns = [
     path('add_post/', add_post, name='add_post'),
@@ -11,4 +12,5 @@ urlpatterns = [
     path('notifications/', notifications, name='notifications'),
     path('notifications/mark-as-read/<int:notification_id>/', mark_notification_as_read,
          name='mark_notification_as_read'),
+    path('clear_notifications/', clear_notifications, name='clear_notifications'),
 ]

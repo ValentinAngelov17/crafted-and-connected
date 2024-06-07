@@ -3,6 +3,8 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
+from crafted_and_connected.social.views import create_order_status_notification
+
 User = get_user_model()
 
 
@@ -57,3 +59,10 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order #{self.id} by {self.user}"
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            orig = Order.objects.get(pk=self.pk)
+            if orig.status != self.status:
+                create_order_status_notification(self)
+        super().save(*args, **kwargs)

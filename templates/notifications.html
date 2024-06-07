@@ -3,18 +3,25 @@
 {% block title %}Notifications{% endblock %}
 
 {% block page_content %}
-    <div class="container" style="background-color: wheat">
-        <h1 style="text-align: center;  font-family: 'Roboto Slab', serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal; margin-bottom: 20px;">Известия</h1>
+    <body>
+    <div class="container" style="background-color: wheat; height: auto;">
+        <h1 style="text-align: center; font-family: 'Roboto Slab', serif; font-optical-sizing: auto; font-weight: 400; font-style: normal; margin-bottom: 20px;">Известия</h1>
         <ul>
             {% for notification in notifications %}
-                <li style="text-align: center; font-family: 'Roboto Slab', serif; font-optical-sizing: auto; font-weight: 400; font-size: 20px;" class="{% if not notification.read %}unread{% endif %}">
-                    {{ notification.content }}
-                    <a href="{% url 'mark_notification_as_read' notification.id %}">Mark as read</a>
-                </li>
+                <div class="notification" style="text-align: center; font-family: 'Roboto Slab', serif; font-optical-sizing: auto; font-weight: 400; font-size: 20px;" class="{% if not notification.read %}unread{% endif %}">
+                    <li >{{ notification.content }}</li>
+                    {% if notification.order %}
+                        <a href="{% url 'order_approve' notification.order.id %}">View Order</a>
+                    {% endif %}
+                </div>
             {% endfor %}
         </ul>
+        <div class="clear-notifications">
+            <form action="{% url 'clear_notifications' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Clear Notifications</button>
+            </form>
+        </div>
     </div>
+</body>
 {% endblock %}

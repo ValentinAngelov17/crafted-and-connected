@@ -8,7 +8,7 @@
             {% for order in orders %}
                 <li>
                     <h2>Поръчка №{{ order.id }} - {{ order.created_at|date:"d M Y" }}</h2>
-                    <p>Статус: {{ order.order_status }}</p>
+                    <p>Статус: {{ order.status }}</p>
                     <p>Продукти: {{ order.items }}</p>
                     <p>Обща цена: {{ order.total_price }} лв.</p>
                     <p>Доставка: {{ order.delivery_option|title }}</p>

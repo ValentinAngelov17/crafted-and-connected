@@ -98,3 +98,7 @@ def mark_notification_as_read(request, notification_id):
     notification.read = True
     notification.save()
     return redirect('notifications')
+def create_order_status_notification(order):
+    content = f"Order #{order.id} status has changed to {order.get_status_display()}."
+    recipient = order.user  # Assuming the order has a 'user' field that links to the User model
+    Notification.objects.create(recipient=recipient, content=content, order=order)

@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.conf import settings
 
 from crafted_and_connected.authentication.models import CustomUser
-from crafted_and_connected.store.models import Order
+
 
 User = get_user_model()
 
@@ -135,7 +135,7 @@ class Notification(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
     content = models.CharField(max_length=255)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, null=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
+    order = models.ForeignKey('store.Order', on_delete=models.CASCADE, blank=True, null=True)
     read = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 

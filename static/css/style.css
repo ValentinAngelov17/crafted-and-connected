@@ -87,7 +87,7 @@ nav {
     display: flex;
     align-items: center;
     padding: 10px;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 80%;
     margin: auto;
 }
@@ -995,7 +995,8 @@ li b {
     display: flex;
     height: 60px;
 }
-.comment-form label{
+
+.comment-form label {
     display: none;
 }
 
@@ -1117,6 +1118,7 @@ li b {
     text-align: center;
     margin-left: 20px;
 }
+
 .cart-info input#id_photos {
     margin: auto;
     width: 200px;
@@ -1133,4 +1135,40 @@ li b {
 .order-data {
     font-size: 20px;
     padding: 5px 0;
+}
+
+
+.hamburger-menu {
+    display: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.hamburger-menu i {
+    color: #000;
+}
+
+/* Responsive Styles */
+@media (max-width: 700px) {
+    .buttons, .notification-icon {
+        display: none;
+    }
+
+    .hamburger-menu {
+        display: block;
+    }
+
+    nav.show,
+    nav.show .buttons,
+    nav.show .notification-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    nav.show .buttons a,
+    nav.show .notification-icon a {
+        margin: 1rem 0;
+    }
 }

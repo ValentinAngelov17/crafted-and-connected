@@ -35,14 +35,11 @@
         <div class="buttons">
             <a href="#" class="after-login-buttons">Съобщения</a>
         </div>
-
         <div class="notification-icon">
             <a href="{% url 'notifications' %}">
                 <i class="fas fa-bell"></i>
                 {% if request.user.is_authenticated %}
-                    <span class="notification-count">
-                {{ request.user|unread_notifications_count }}
-            </span>
+                    <span class="notification-count">{{ request.user|unread_notifications_count }}</span>
                 {% endif %}
             </a>
         </div>
@@ -52,14 +49,21 @@
     </div>
     <div class="buttons">
         {% if request.user.is_authenticated %}
-            <a href="{% url 'profile' %}"> Профил</a>
+            <a href="{% url 'profile' %}">Профил</a>
         {% else %}
             <a href="{% url 'register' %}">Регистрация</a>
         {% endif %}
     </div>
+    <div class="hamburger-menu">
+        <i class="fas fa-bars"></i>
+    </div>
 </nav>
 {% block page_content %}
-
 {% endblock %}
+<script>
+    document.querySelector('.hamburger-menu').addEventListener('click', function() {
+        document.querySelector('nav').classList.toggle('show');
+    });
+</script>
 </body>
 </html>

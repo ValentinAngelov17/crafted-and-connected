@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_GET
 from django.urls import reverse
@@ -192,6 +192,7 @@ def create_order(request):
                 total_price = sum(item.post.price * item.quantity for item in items) + delivery_charge
                 order = Order.objects.create(
                     user=request.user,
+                    seller=user,  # Assign the seller
                     items=order_items,
                     total_price=total_price,
                     delivery_option=request.POST.get('delivery_option', 'default_option'),
@@ -203,15 +204,11 @@ def create_order(request):
                 )
                 orders.append(order)
 
-                # Create notification for the seller
-                Notification.create_notification(user, f'User {request.user.username} placed a new order', order=order)
-
-            # Notify sellers
-            sellers = set(item.post.user for item in cart.items.all())
-            for seller in sellers:
-                for item in cart.items.all():
-                    content = f"{request.user.first_name} {request.user.last_name} ordered items from you."
-                    Notification.objects.create(recipient=seller, content=content, post=item.post)
+                Notification.objects.create(
+                    recipient=user,
+                    content=f"User {request.user.first_name} {request.user.last_name} placed a new order",
+                     # Link to order details
+                )
 
             # Clear the cart
             cart.items.all().delete()
@@ -224,21 +221,30 @@ def create_order(request):
 
 @login_required
 def order_history(request):
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'order_history.html', {'orders': orders})
+    filter_type = request.GET.get('filter', 'buying')
 
+    if filter_type == 'selling':
+        orders = Order.objects.filter(seller=request.user)
+    else:  # Default to 'buying'
+        orders = Order.objects.filter(user=request.user)
+
+    return render(request, 'order_history.html', {'orders': orders, 'filter': filter_type})
 
 @login_required
-def order_approve(request, order_id):
+def order_details(request, order_id):
     order = get_object_or_404(Order, id=order_id)
+    items = order.items.split('\n')
 
-    if request.method == 'POST':
-        action = request.POST.get('action')
-        if action == 'accept':
+    if request.method == 'POST' and request.user == order.seller:
+        if 'approve' in request.POST:
             order.status = 'accepted'
-        elif action == 'decline':
+            order.save()
+        elif 'decline' in request.POST:
             order.status = 'declined'
-        order.save()
-        return redirect('notifications')
+            order.save()
+        return redirect('order_details', order_id=order.id)
 
-    return render(request, 'order_approve.html', {'order': order})
+    return render(request, 'order_details.html', {'order': order, 'items': items})
+
+
+

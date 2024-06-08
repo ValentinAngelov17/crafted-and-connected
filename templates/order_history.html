@@ -1,24 +1,77 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block page_content %}
-<div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
-    <h1>История на поръчките</h1>
-    {% if orders %}
+    <style>
+        .order-history-buttons {
+            padding: 20px 20px;
+            border: 0 solid #ccc;
+            cursor: pointer;
+    
+
+        }
+
+        .button-green {
+            background-color: wheat;
+            color: black;
+            font-size: 26px;
+
+        }
+
+        .button-white {
+            background-color: rgb(18 55 38);
+            color: white;
+            font-size: 18px;
+        }
+    </style>
+    <h1 style="text-align: center; margin-bottom: 20px;">Поръчки</h1>
+    <div class="user-profile" style="min-width: 300px; max-width: 400px; min-height: 400px; align-content: center; margin: auto;">
+
+
+        <div style="display: flex; gap: 0px; justify-content: center; width: 100%">
+            <button id="buyingButton"
+                    class="order-history-buttons {% if filter == 'buying' %}button-green{% else %}button-white{% endif %}"
+                    onclick="filterOrders('buying')" style="width: 50%;
+            border-top-left-radius: 50px;">Купувам
+            </button>
+            <button id="sellingButton"
+                    class="order-history-buttons {% if filter == 'selling' %}button-green{% else %}button-white{% endif %}"
+                    onclick="filterOrders('selling')" style="width: 50%;
+            border-top-right-radius: 50px;">Продавам
+            </button>
+        </div>
+
+        
+
         <ul>
             {% for order in orders %}
-                <li>
-                    <h2>Поръчка №{{ order.id }} - {{ order.created_at|date:"d M Y" }}</h2>
-                    <p>Статус: {{ order.status }}</p>
-                    <p>Продукти: {{ order.items }}</p>
-                    <p>Обща цена: {{ order.total_price }} лв.</p>
-                    <p>Доставка: {{ order.delivery_option|title }}</p>
-                <p>{{ order.billing_address }}</p>
-                <p>{{ order.phone_number }}</p>
+                <li style=" padding: 10px 0; font-size: 20px;">
+                    <a href="{% url 'order_details' order.id %}">Order #{{ order.id }}</a>
+                    - {{ order.get_status_display }}
+                    - {{ order.total_price }}
                 </li>
             {% endfor %}
         </ul>
-    {% else %}
-        <p>Нямате направени поръчки.</p>
-    {% endif %}
-</div>
+    </div>
+
+
+    <script>
+        function filterOrders(filterType) {
+            const buyingButton = document.getElementById('buyingButton');
+            const sellingButton = document.getElementById('sellingButton');
+
+            if (filterType === 'buying') {
+                buyingButton.classList.add('button-green');
+                buyingButton.classList.remove('button-white');
+                sellingButton.classList.add('button-white');
+                sellingButton.classList.remove('button-green');
+            } else if (filterType === 'selling') {
+                sellingButton.classList.add('button-green');
+                sellingButton.classList.remove('button-white');
+                buyingButton.classList.add('button-white');
+                buyingButton.classList.remove('button-green');
+            }
+
+            window.location.href = `{% url 'order_history' %}?filter=` + filterType;
+        }
+    </script>
 {% endblock %}

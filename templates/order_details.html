@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Details{% endblock %}
+
+{% block page_content %}
+    <div class="user-profile" style="min-width: 300px; max-width: 400px; margin: auto;">
+        <h1 style="padding: 20px 0;">Детайли на поръчка №{{ order.id }}</h1>
+        <h2>Статус на поръчката: {{ order.status }}</h2>
+        <p style="padding: 10px; font-size: 20px;">
+            <strong>Потребител:</strong> {{ order.user.first_name }} {{ order.user.last_name }}</p>
+        <p style="padding: 10px; font-size: 20px;"><strong>Обща цена:</strong> {{ order.total_price }} лв.</p>
+        <p style="padding: 10px; font-size: 20px;"><strong>Доставчик:</strong> {{ order.delivery_option }}</p>
+
+        <h2 style="padding: 10px;">Продукти:</h2>
+        <ul style="padding-bottom: 10px;">
+            {% for item in items %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+        {% if user == order.seller %}
+            <form method="post">
+                {% csrf_token %}
+                <button style="margin-bottom: 30px; margin-top: 0;" class="profile-buttons" type="submit"
+                        name="approve">Приеми
+                </button>
+                <button style="margin-bottom: 30px; margin-top: 0;" class="profile-buttons" type="submit"
+                        name="decline">Откажи
+                </button>
+            </form>
+        {% endif %}
+    </div>
+
+{% endblock %}

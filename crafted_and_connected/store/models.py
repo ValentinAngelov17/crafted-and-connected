@@ -3,7 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from crafted_and_connected.social.views import create_order_status_notification
+from crafted_and_connected.store.utils import create_order_status_notification
 
 User = get_user_model()
 
@@ -46,6 +46,8 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='seller_orders', on_delete=models.CASCADE,
+                               null=True, blank=True)
     items = models.TextField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_option = models.CharField(max_length=255)

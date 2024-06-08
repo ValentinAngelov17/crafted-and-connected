@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block page_content %}
     <div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
-        <h1>Потвърждение</h1>
+        <h1 style="padding: 20px 0;">Потвърждение</h1>
         <h2>Продукти:</h2>
         <ul>
             {% for item in cart.items.all %}
@@ -31,7 +31,7 @@
             <input type="hidden" name="phone_number" value="{{ billing_details.phone_number }}">
             <input type="hidden" name="email" value="{{ billing_details.email }}">
             <input type="hidden" name="billing_address" value="{{ billing_details.billing_address }}">
-            <button class="profile-buttons" style="width: 200px; " type="submit">Създай поръчка</button>
+            <button class="profile-buttons" style="width: 200px; margin-top: 20px; " type="submit">Създай поръчка</button>
         </form>
         <div class="buttons" style="margin: 20px 0; padding-bottom: 20px;"><a  href="{% url 'checkout' %}"> Назад </a></div>
     </div>

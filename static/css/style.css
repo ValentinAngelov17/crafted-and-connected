@@ -24,7 +24,7 @@ body {
 }
 
 .top-header-register {
-    background-color: #feaf03;
+    background-color: #9f5d20;
 }
 
 .categories {
@@ -288,7 +288,7 @@ header {
 .btn {
     height: 60px;
     width: 300px;
-    box-shadow: 10px 10px 30px rgb(254, 215, 188);
+    box-shadow: 10px 10px 30px gray;
     border-radius: 50px;
     display: flex;
     margin: 20px 100px;
@@ -311,10 +311,11 @@ header {
     height: 60px;
     width: 120px;
     border-radius: 50px;
-    background-image: linear-gradient(to right,
-    rgb(255, 195, 110),
-    rgb(255, 146, 91));;
+    background-color: rgb(18 55 38);
+}
 
+.login a {
+    color: white;
 }
 
 .slider {
@@ -328,10 +329,6 @@ header {
     transition: all 0.5s ease-in-out;
 }
 
-.moveslider {
-    left: 220px;
-    width: 180px;
-}
 
 .form-section {
     height: 500px;
@@ -391,11 +388,10 @@ header {
     height: 60px;
     width: 150px;
     border-radius: 50px;
-    background-image: linear-gradient(to right,
-    rgb(255, 195, 110),
-    rgb(255, 146, 91));
+    background-color: rgb(18 55 38);
     font-size: 22px;
     border: none;
+    color: white;
     cursor: pointer;
 }
 

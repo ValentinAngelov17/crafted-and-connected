@@ -5,23 +5,34 @@
 {% block page_content %}
     <body>
     <div class="container" style="background-color: wheat; height: auto;">
-        <h1 style="text-align: center; font-family: 'Roboto Slab', serif; font-optical-sizing: auto; font-weight: 400; font-style: normal; margin-bottom: 20px;">Известия</h1>
+        <h1 style="text-align: center; font-family: 'Roboto Slab', serif; font-optical-sizing: auto; font-weight: 400; font-style: normal; margin-bottom: 20px;">
+            Известия</h1>
         <ul>
             {% for notification in notifications %}
-                <div class="notification" style="text-align: center; font-family: 'Roboto Slab', serif; font-optical-sizing: auto; font-weight: 400; font-size: 20px;" class="{% if not notification.read %}unread{% endif %}">
-                    <li >{{ notification.content }}</li>
+                <div class="notification"
+                     style="text-align: center; font-family: 'Roboto Slab', serif; font-optical-sizing: auto; font-weight: 400; font-size: 20px;"
+                     class="{% if not notification.read %}unread{% endif %}">
+                    <li>{{ notification.content }}</li>
                     {% if notification.order %}
-                        <a href="{% url 'order_approve' notification.order.id %}">View Order</a>
+                        <a href="{% url 'order_details' notification.order.id %}">View Order</a>
                     {% endif %}
                 </div>
+
             {% endfor %}
-        </ul>
-        <div class="clear-notifications">
-            <form action="{% url 'clear_notifications' %}" method="post">
-                {% csrf_token %}
-                <button type="submit">Clear Notifications</button>
-            </form>
-        </div>
+            {% if notifications %}
+                </ul>
+                <div class="clear-notifications">
+                    <form action="{% url 'clear_notifications' %}" method="post">
+                        {% csrf_token %}
+                        <div class="buttons" style="text-align: center">
+                            <button class="profile-buttons" type="submit">Изчисти известията</button>
+                        </div>
+
+                    </form>
+                </div>
+                {% else %}
+                <h3 style="text-align: center; margin: 20px;">Нямате известия</h3>
+            {% endif %}
     </div>
-</body>
+    </body>
 {% endblock %}

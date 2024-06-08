@@ -6,7 +6,7 @@
     <div class="user-profile" style="max-width: 500px;%; min-width: 350px; height: 100%; margin: auto">
         <h1>Поръчката ви е създадена!</h1>
         {% for order in orders %}
-            <h3>Номер на поръчката: {{ order.id }}</h3>
+            <h3>Номер на поръчката: <a href="{% url 'order_details' order.id %}">{{ order.id }}</a></h3>
             <h2>Детайли:</h2>
             <p class="order-data">Име: {{ order.first_name }}</p>
             <p class="order-data">Фамилия: {{ order.last_name }}</p>

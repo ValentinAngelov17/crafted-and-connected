@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <style>
+        .messages {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .messages li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .messages li.success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+
+        .messages li.error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    </style>
+    <div class="user-profile" style="min-width: 300px; max-width: 400px; min-height: 400px; margin: auto;">
+        <h1 style="padding: 20px;">Редактиране на профил</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Данни</legend>
+                <div class="cart-info">
+                    {{ profile_form.as_p }}
+                </div>
+
+            </fieldset>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <fieldset>
+                <legend>Смяна на парола</legend>
+                <div class="cart-info">
+                    {{ password_form.as_p }}
+                </div>
+
+            </fieldset>
+            <button style="margin-bottom: 30px; margin-top: 20px;" class="profile-buttons" type="submit">Промени</button>
+        </form>
+    </div>
+{% endblock %}

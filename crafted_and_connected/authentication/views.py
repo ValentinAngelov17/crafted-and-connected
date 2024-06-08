@@ -5,12 +5,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.views.generic import CreateView, FormView
-from crafted_and_connected.authentication.forms import CustomUserCreationForm, CustomUserLoginForm, ProfilePictureForm
+from django.views.generic import CreateView
+from crafted_and_connected.authentication.forms import CustomUserCreationForm, CustomUserLoginForm, \
+    CustomPasswordChangeForm, ProfileForm
 from crafted_and_connected.authentication.models import Follow, CustomUser
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import make_password
 from crafted_and_connected.social.models import Post
-
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 User = get_user_model()
 
 
@@ -58,29 +60,46 @@ def profile(request):
     return redirect('user_profile', user_id=user.id)
 
 
-
-
 @login_required
 def logout_view(request):
     logout(request)
     return redirect('index')
 
 
-# views.py
-from django.shortcuts import render, redirect
-from .forms import ProfilePictureForm
-
-
-def update_profile_picture(request):
+@login_required
+def update_profile(request):
     if request.method == 'POST':
-        form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')  # Redirect to profile page after successful update
-    else:
-        form = ProfilePictureForm(instance=request.user)
-    return render(request, 'update_profile_picture.html', {'form': form})
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user)
+        password_form = CustomPasswordChangeForm(user=request.user, data=request.POST)
 
+        if profile_form.is_valid():
+            user = profile_form.save(commit=False)
+            if password_form.is_valid():
+                new_password = password_form.cleaned_data.get('new_password1')
+                if new_password:
+                    user.set_password(new_password)
+                user.save()
+
+                if new_password:
+                    update_session_auth_hash(request, user)  # Update the session with the new password
+
+                messages.success(request, 'Your profile has been updated successfully.')
+                return redirect('profile')  # Redirect to profile page after successful update
+            else:
+                for error in password_form.errors.values():
+                    messages.error(request, error)
+        else:
+            for error in profile_form.errors.values():
+                messages.error(request, error)
+
+    else:
+        profile_form = ProfileForm(instance=request.user)
+        password_form = CustomPasswordChangeForm(user=request.user)
+
+    return render(request, 'update_profile.html', {
+        'profile_form': profile_form,
+        'password_form': password_form,
+    })
 
 @login_required
 def user_profile(request, user_id):

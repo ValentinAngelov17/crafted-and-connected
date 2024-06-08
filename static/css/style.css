@@ -1119,7 +1119,10 @@ li b {
     margin: auto;
     width: 200px;
 }
-
+.cart-info input#id_profile_picture {
+    margin: auto;
+    width: 200px;
+}
 .cart-info ul li {
     display: none;
 }

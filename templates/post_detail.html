@@ -29,7 +29,9 @@
                     {% if not is_following_post_user %}
                         <form method="post" action="{% url 'follow_user' post.user.id %}">
                             {% csrf_token %}
-                            <button class="profile-buttons" style="margin: 0; font-size: 18px;" type="submit">Последвай</button>
+                            <button class="profile-buttons" style="margin: 0; font-size: 18px;" type="submit">
+                                Последвай
+                            </button>
                         </form>
                     {% else %}
                         <form method="post" action="{% url 'unfollow_user' post.user.id %}">
@@ -68,7 +70,7 @@
                     Цена: {{ post.price }} лв
                 </div>
                 <div class="buttons">
-                     <a href="{% url 'add_to_cart' post.id %}">Купи</a>
+                    <a href="{% url 'add_to_cart' post.id %}">Купи</a>
                 </div>
 
             </div>
@@ -78,6 +80,7 @@
                 {% endif %}
                 <ul>
                     {% for comment in comments %}
+
                         <li style="font-size: 22px; padding-left: 10px;">
                             <div class="comment">
                                 <img
@@ -99,6 +102,15 @@
                         <p style="padding-left: 20px;">No comments yet.</p>
                     {% endfor %}
                 </ul>
+                {% if not show_all and post.comments.count > 5 %}
+                    <button id="load-more-comments" class="profile-buttons" style="font-size: 18px; margin: 0;">Load All
+                        Comments
+                    </button>
+                {% elif show_all %}
+                    <button id="hide-comments" class="profile-buttons" style="font-size: 18px; margin: 0;">Hide
+                        Comments
+                    </button>
+                {% endif %}
 
                 <!-- Add a comment -->
 
@@ -128,7 +140,7 @@
                 <div class="add-comments" style="border-style: hidden;">
                     <div><img style="width: 60px; height: 60px; margin-left: 20px; border-radius: 50px;"
                               src="{{ request.user.profile_picture.url }}" alt=""></div>
-                    <form class="comment-form" method="POST">
+                    <form class="comment-form" method="POST" action="{% url 'add_comment' post.id %}">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <button class="profile-buttons" type="submit"
@@ -146,6 +158,26 @@
 
     </div>
     <script>
+         document.addEventListener('DOMContentLoaded', function() {
+            var loadMoreBtn = document.getElementById('load-more-comments');
+            var hideCommentsBtn = document.getElementById('hide-comments');
+
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', function() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.set('show_all', 'true');
+                    window.location.search = urlParams.toString();
+                });
+            }
+
+            if (hideCommentsBtn) {
+                hideCommentsBtn.addEventListener('click', function() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.delete('show_all');
+                    window.location.search = urlParams.toString();
+                });
+            }
+        });
         document.getElementById('buy-link').addEventListener('click', function (event) {
             event.preventDefault();
             var postId = this.getAttribute('data-post-id');
@@ -167,5 +199,7 @@
                     console.error('Error:', error);
                 });
         });
+
+
     </script>
 {% endblock %}

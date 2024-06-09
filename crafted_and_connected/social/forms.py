@@ -11,28 +11,28 @@ class PostForm(forms.ModelForm):
     subcategory = forms.ChoiceField(choices=[], required=True)
 
     def __init__(self, *args, **kwargs):
-
         super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['category'].choices = Post.CATEGORY_CHOICES
-        self.fields['subcategory'].choices = []
-        self.fields['category'].label = 'Категория'
-        self.fields['subcategory'].label = 'Категория'
 
+        # Set the initial choices for category and subcategory
+        self.fields['category'].choices = [('', 'Select a category')] + list(Post.CATEGORY_CHOICES)
+        self.fields['subcategory'].choices = [('', 'Select a subcategory')]
+
+        # Set labels for fields
+        self.fields['category'].label = 'Категория'
+        self.fields['subcategory'].label = 'Подкатегория'
         self.fields['title'].label = "Заглавие:"
         self.fields['description'].label = "Описание:"
         self.fields['price'].label = "Цена:"
         self.fields['delivery_time'].label = "Време за доставка(дни)"
         self.fields['photos'].label = "Качване на снимка:"
 
+        # Set choices for subcategory based on the selected category or instance category
         if 'category' in self.data:
-            try:
-                category = self.data.get('category')
-                self.fields['subcategory'].choices = Post.SUBCATEGORY_CHOICES.get(category, [])
-            except (ValueError, TypeError):
-                pass
+            category = self.data.get('category')
+            self.fields['subcategory'].choices = [('', 'Select a subcategory')] + list(Post.SUBCATEGORY_CHOICES.get(category, []))
         elif self.instance.pk:
             category = self.instance.category
-            self.fields['subcategory'].choices = Post.SUBCATEGORY_CHOICES.get(category, [])
+            self.fields['subcategory'].choices = [('', 'Select a subcategory')] + list(Post.SUBCATEGORY_CHOICES.get(category, []))
 
 
 class CommentForm(forms.ModelForm):

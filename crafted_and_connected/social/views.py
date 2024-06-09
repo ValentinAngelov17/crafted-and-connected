@@ -41,9 +41,9 @@ def load_subcategories(request):
 @login_required
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    comments = post.comments.all()
     is_liked = post.likes.filter(id=request.user.id).exists()
-
+    show_all = request.GET.get('show_all', 'false') == 'true'
+    comments = post.comments.all() if show_all else post.comments.all()[:4]
     is_following_post_user = Follow.objects.filter(follower=request.user, followed=post.user).exists()
 
     if request.method == 'POST':
@@ -62,7 +62,8 @@ def post_detail(request, post_id):
         'comments': comments,
         'is_liked': is_liked,
         'form': form,
-        'is_following_post_user': is_following_post_user,  # Include the variable in the context
+        'is_following_post_user': is_following_post_user,
+        'show_all': show_all,
     }
     return render(request, 'post_detail.html', context)
 
@@ -81,9 +82,17 @@ def like_post(request, post_id):
 def add_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
-        text = request.POST.get('text')
-        comment = Comment.objects.create(user=request.user, post=post, text=text)
-        return redirect('post_detail', post_id=post_id)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            return redirect('post_detail', post_id=post_id)
+    else:
+        form = CommentForm()
+
+    return redirect('post_detail', post_id=post_id)
 
 
 @login_required
@@ -99,7 +108,6 @@ def mark_notification_as_read(request, notification_id):
     notification.read = True
     notification.save()
     return redirect('notifications')
-
 
 
 @login_required

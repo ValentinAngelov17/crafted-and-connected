@@ -49,9 +49,12 @@
                 </form>
             </div>
         {% else %}
-            <div class="buttons" style="margin-bottom: 20px;">
-                <a class="after-login-buttons">Съобщение</a>
-            </div>
+            {% if user != request.user %}
+                <div class="buttons" style="margin-bottom: 20px;">
+                    <a class="after-login-buttons"
+                       href="{% url 'chat_room' user_id=user.id %}?first_name={{ user.first_name }}&last_name={{ user.last_name }}">Съобщение</a>
+                </div>
+            {% endif %}
             {% if not is_following %}
                 <form method="post" action="{% url 'follow_user' user.id %}">
                     {% csrf_token %}
@@ -82,5 +85,13 @@
         {% endif %}
 
     </div>
+    <script>
+        document.getElementById('message-button').addEventListener('click', function () {
+            // Extract room name or ID from the URL or data attribute
+            var roomName = "{{ user.room_name }}"; // Adjust this to match your context
 
+            // Redirect the user to the chat room URL with the room name as a parameter
+            window.location.href = "/chat/" + roomName + "/";
+        });
+    </script>
 {% endblock %}

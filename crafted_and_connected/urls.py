@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('crafted_and_connected.store.urls')),
     path('accounts/', include('crafted_and_connected.authentication.urls')),
     path('post/', include('crafted_and_connected.social.urls')),
+    path('chat/', include('crafted_and_connected.messaging.urls')),
 ]
 
 if settings.DEBUG:

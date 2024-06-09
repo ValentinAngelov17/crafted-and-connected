@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <style>
+
+
+        .message {
+            margin-bottom: 5px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 5px;
+            width: 90%;
+            border-radius: 20px;
+        }
+
+        .message.current-user {
+            background-color: rgb(18 55 38);
+            text-align: right;
+            color: white;
+        }
+
+        .message.other-user {
+            background-color: #9f5d20;
+            color: white;
+            text-align: left;
+        }
+
+        #message-input {
+            width: calc(100% - 106px);
+            height: 50px;
+
+            padding: 5px;
+            border-radius: 40px;
+        }
+
+        #message-form button {
+            padding: 18px 20px;
+            background-color: rgb(18 55 38);
+            color: white;
+            font-size: 14px;
+            border-radius: 40px;
+        }
+
+        #message-form {
+            width: 90%;
+            margin: auto;
+            padding-bottom: 20px;
+        }
+    </style>
+    <body>
+
+    <h1 style="padding: 14px; background-color: wheat; min-width: 370px; max-width: 430px; margin: auto; border-top-left-radius: 30px; border-top-right-radius: 30px;">{{ title }}</h1>
+    <div class="user-profile" id="message-container" style="min-width: 370px; max-width: 430px; margin: auto;  max-height: 400px;
+            overflow-y: auto; border-top-right-radius: 0; border-top-left-radius: 0;">
+
+        {% for message in room.messages.all %}
+            {% if message.user == request.user %}
+                <div class="message {% if message.user == request.user %}current-user{% else %}other-user{% endif %}">
+                    <b style="font-size: 24px;">{{ message.content }}</b> <img
+                        src="{{ message.user.profile_picture.url }}" alt=""
+                        style="width: 50px; height: 50px; border-radius: 50px;">
+                </div>
+
+            {% else %}
+                <div class="message {% if message.user == request.user %}current-user{% else %}other-user{% endif %}">
+                    <img src="{{ message.user.profile_picture.url }}" alt=""
+                         style="width: 50px; height: 50px; border-radius: 50px;"> <b
+                        style="font-size: 24px;">{{ message.content }}</b>
+                </div>
+            {% endif %}
+
+        {% endfor %}
+        <form id="message-form">
+            <input type="text" id="message-input" placeholder="Напиши съобщение...">
+            <button type="submit">Изпрати</button>
+        </form>
+    </div>
+
+
+    <script>
+        const room = {{ room_json|safe }};
+        const currentUserId = {{ request.user.id }};
+        const form = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        const messageContainer = document.getElementById('message-container');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const message = messageInput.value.trim();
+            if (message === '') {
+                return;
+            }
+
+            try {
+                const response = await fetch('/chat/api/send_message/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify({
+                        room_id: room.id,
+                        message: message
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const newMessage = document.createElement('div');
+                    newMessage.classList.add('message');
+                    if (data.user_id === currentUserId) {
+                        newMessage.classList.add('current-user');
+                    } else {
+                        newMessage.classList.add('other-user');
+                    }
+                    newMessage.textContent = `${data.message}:${data.first_name} ${data.last_name}`;
+                    // Insert the new message before the message input form
+                    messageContainer.insertBefore(newMessage, form);
+                    messageInput.value = '';
+                } else {
+                    console.error('Failed to send message:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error sending message:', error.message);
+            }
+        });
+    </script>
+    </body>
+{% endblock %}

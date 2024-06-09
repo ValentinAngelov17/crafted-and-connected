@@ -104,6 +104,8 @@ def update_profile(request):
 @login_required
 def user_profile(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
+    room_name = f"user_{request.user.id}_to_{user_id}"
+    print("Room name:", room_name)
     posts = Post.objects.filter(user=user).order_by('-created_at')
     post_count = posts.count()
     followers_count = Follow.objects.filter(followed=user).count()
@@ -116,6 +118,7 @@ def user_profile(request, user_id):
         'posts': posts,
         'post_count': post_count,
         'is_following': is_following,
+        'room_name': room_name,
     })
 
 

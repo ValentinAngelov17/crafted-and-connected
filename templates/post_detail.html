@@ -44,7 +44,8 @@
                 </div>
                 <div class="item3">
                     <div class="buttons">
-                        <a href="">Съобщение</a>
+                        <a class="after-login-buttons"
+                       href="{% url 'chat_room' user_id=post.user.id %}?first_name={{ post.user.first_name }}&last_name={{ post.user.last_name }}">Съобщение</a>
                     </div>
                 </div>
                 <div class="item2"><i class="fas fa-star" style="color: gold;"> 5.0</i></div>

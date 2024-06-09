@@ -13,8 +13,11 @@ from crafted_and_connected.store.forms import CheckoutForm
 from crafted_and_connected.store.models import Cart, CartItem, Order
 from decimal import Decimal
 
+User = get_user_model()
 
-# Create your views here.
+from collections import defaultdict
+
+
 def index(request):
     categories = Post.CATEGORY_CHOICES
     context = {
@@ -74,15 +77,14 @@ def search(request):
 def add_to_cart(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
-    # Check if the item is already in the cart
+
     existing_item = cart.items.filter(post=post).first()
     if existing_item:
-        # If the item is already in the cart, increment the quantity
         existing_item.quantity += 1
         existing_item.save()
     else:
-        # If the item is not in the cart, create a new cart item
         CartItem.objects.create(cart=cart, post=post, quantity=1)
+
     return redirect('view_cart')
 
 
@@ -92,6 +94,7 @@ def view_cart(request):
 
     if request.method == 'POST':
         return redirect('checkout')
+
     return render(request, 'cart.html', {'cart': cart})
 
 
@@ -100,17 +103,20 @@ def increase_quantity(request, item_id):
     item = get_object_or_404(CartItem, pk=item_id, cart__user=request.user)
     item.quantity += 1
     item.save()
+
     return redirect('view_cart')
 
 
 @login_required
 def decrease_quantity(request, item_id):
     item = get_object_or_404(CartItem, pk=item_id, cart__user=request.user)
+
     if item.quantity > 1:
         item.quantity -= 1
         item.save()
     else:
         item.delete()
+
     return redirect('view_cart')
 
 
@@ -118,12 +124,8 @@ def decrease_quantity(request, item_id):
 def remove_item(request, item_id):
     item = get_object_or_404(CartItem, pk=item_id, cart__user=request.user)
     item.delete()
+
     return redirect('view_cart')
-
-
-User = get_user_model()
-
-from collections import defaultdict
 
 
 @login_required
@@ -132,9 +134,8 @@ def checkout(request):
     if not cart or not cart.items.all():
         return redirect('view_cart')
 
-    # Calculate total sum and total delivery sum
-    total_sum = Decimal(0)  # Initialize as Decimal
-    total_delivery_sum = Decimal(0)  # Init
+    total_sum = Decimal(0)
+    total_delivery_sum = Decimal(0)
     items_by_user = defaultdict(list)
     for item in cart.items.all():
         items_by_user[item.post.user].append(item)
@@ -180,19 +181,18 @@ def create_order(request):
             cart = Cart.objects.get(user=request.user)
             items_by_user = defaultdict(list)
 
-            # Group items by the user who owns the post
             for item in cart.items.all():
                 items_by_user[item.post.user].append(item)
 
             orders = []
-            delivery_charge = Decimal('4.50')  # Define a fixed delivery charge
+            delivery_charge = Decimal('4.50')  # fixed delivery charge
 
             for user, items in items_by_user.items():
                 order_items = ", ".join([f"{item.post.title} (Quantity: {item.quantity})" for item in items])
                 total_price = sum(item.post.price * item.quantity for item in items) + delivery_charge
                 order = Order.objects.create(
                     user=request.user,
-                    seller=user,  # Assign the seller
+                    seller=user,
                     items=order_items,
                     total_price=total_price,
                     delivery_option=request.POST.get('delivery_option', 'default_option'),
@@ -207,13 +207,10 @@ def create_order(request):
                 Notification.objects.create(
                     recipient=user,
                     content=f"User {request.user.first_name} {request.user.last_name} placed a new order",
-                     # Link to order details
                 )
 
-            # Clear the cart
             cart.items.all().delete()
 
-            # Pass the orders list to the template
             return render(request, 'order_confirmation.html', {'orders': orders})
 
     return redirect('checkout')
@@ -225,10 +222,11 @@ def order_history(request):
 
     if filter_type == 'selling':
         orders = Order.objects.filter(seller=request.user)
-    else:  # Default to 'buying'
+    else:
         orders = Order.objects.filter(user=request.user)
 
     return render(request, 'order_history.html', {'orders': orders, 'filter': filter_type})
+
 
 @login_required
 def order_details(request, order_id):
@@ -237,14 +235,12 @@ def order_details(request, order_id):
 
     if request.method == 'POST' and request.user == order.seller:
         if 'approve' in request.POST:
-            order.status = 'accepted'
+            order.status = 'Приета'
             order.save()
         elif 'decline' in request.POST:
-            order.status = 'declined'
+            order.status = 'Отказана'
             order.save()
         return redirect('order_details', order_id=order.id)
 
-    return render(request, 'order_details.html', {'order': order, 'items': items})
-
-
-
+    return render(request, 'order_details.html',
+                  {'order': order, 'items': items})

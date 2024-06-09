@@ -38,13 +38,12 @@ class CartItem(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('pending', _('Pending')),
-        ('accepted', _('Accepted')),
-        ('declined', _('Declined')),
-        ('sent_to_delivery', _('Sent to Delivery Company')),
-        ('delivered', _('Delivered'))
+        ('pending', _('В изчакване')),
+        ('accepted', _('Приета')),
+        ('declined', _('Отказана')),
+        ('sent_to_delivery', _('Изпратена за получаване')),
+        ('delivered', _('Получена'))
     ]
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='seller_orders', on_delete=models.CASCADE,
                                null=True, blank=True)

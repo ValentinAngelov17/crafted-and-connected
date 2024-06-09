@@ -36,7 +36,9 @@
                     {% else %}
                         <form method="post" action="{% url 'unfollow_user' post.user.id %}">
                             {% csrf_token %}
-                            <button class="profile-buttons" type="submit">Отпоследвай</button>
+                            <button class="profile-buttons" style="margin: 0; font-size: 18px;" type="submit">
+                                Отпоследвай
+                            </button>
                         </form>
                     {% endif %}
                 </div>
@@ -158,12 +160,12 @@
 
     </div>
     <script>
-         document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var loadMoreBtn = document.getElementById('load-more-comments');
             var hideCommentsBtn = document.getElementById('hide-comments');
 
             if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', function() {
+                loadMoreBtn.addEventListener('click', function () {
                     const urlParams = new URLSearchParams(window.location.search);
                     urlParams.set('show_all', 'true');
                     window.location.search = urlParams.toString();
@@ -171,7 +173,7 @@
             }
 
             if (hideCommentsBtn) {
-                hideCommentsBtn.addEventListener('click', function() {
+                hideCommentsBtn.addEventListener('click', function () {
                     const urlParams = new URLSearchParams(window.location.search);
                     urlParams.delete('show_all');
                     window.location.search = urlParams.toString();

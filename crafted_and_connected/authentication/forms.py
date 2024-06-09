@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth.password_validation import validate_password
+from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
 
@@ -32,13 +32,20 @@ class CustomUserLoginForm(AuthenticationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'profile_picture']
+        fields = ['first_name', 'last_name', 'email', 'description', 'profile_picture']
+        labels = {
+            'first_name': _('Име'),
+            'last_name': _('Фамилия'),
+            'email': _('Електронна поща'),
+            'profile_picture': _('Профилна снимка')
+        }
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), label='Описание', required=False)
 
 
 class CustomPasswordChangeForm(forms.Form):
-    old_password = forms.CharField(widget=forms.PasswordInput, label="Old Password", required=False)
-    new_password1 = forms.CharField(widget=forms.PasswordInput, label="New Password", required=False)
-    new_password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm New Password", required=False)
+    old_password = forms.CharField(widget=forms.PasswordInput, label="Текуща парола", required=False)
+    new_password1 = forms.CharField(widget=forms.PasswordInput, label="Нова парола", required=False)
+    new_password2 = forms.CharField(widget=forms.PasswordInput, label="Потвърди нова парола", required=False)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -47,7 +54,7 @@ class CustomPasswordChangeForm(forms.Form):
     def clean_old_password(self):
         old_password = self.cleaned_data.get('old_password')
         if old_password and not self.user.check_password(old_password):
-            raise forms.ValidationError("Old password is incorrect")
+            raise forms.ValidationError("Текуща парола е невалидна")
         return old_password
 
     def clean(self):
@@ -58,13 +65,13 @@ class CustomPasswordChangeForm(forms.Form):
 
         if old_password or new_password1 or new_password2:
             if not old_password:
-                self.add_error('old_password', "This field is required.")
+                self.add_error('old_password', "Това поле е задължително")
             if not new_password1:
-                self.add_error('new_password1', "This field is required.")
+                self.add_error('new_password1', "Това поле е задължително")
             if not new_password2:
-                self.add_error('new_password2', "This field is required.")
+                self.add_error('new_password2', "Това поле е задължително")
             if new_password1 and new_password1 != new_password2:
-                raise forms.ValidationError("New passwords do not match")
+                raise forms.ValidationError("Новата парола несъвпада")
             validate_password(new_password1, self.user)
 
         return cleaned_data

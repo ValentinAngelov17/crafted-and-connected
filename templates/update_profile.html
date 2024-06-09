@@ -28,9 +28,10 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset>
-                <legend>Данни</legend>
+                <legend style="font-size: 20px;"><strong>Данни</strong></legend>
                 <div class="cart-info">
                     {{ profile_form.as_p }}
+                    
                 </div>
 
             </fieldset>
@@ -43,13 +44,14 @@
             {% endif %}
 
             <fieldset>
-                <legend>Смяна на парола</legend>
+                <legend style="font-size: 20px;"><strong>Смяна на парола</strong></legend>
                 <div class="cart-info">
                     {{ password_form.as_p }}
                 </div>
 
             </fieldset>
-            <button style="margin-bottom: 30px; margin-top: 20px;" class="profile-buttons" type="submit">Промени</button>
+            <button style="margin-bottom: 30px; margin-top: 20px;" class="profile-buttons" type="submit">Промени
+            </button>
         </form>
     </div>
 {% endblock %}

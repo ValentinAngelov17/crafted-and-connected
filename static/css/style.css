@@ -556,7 +556,8 @@ header {
 }
 
 .post-decription {
-    height: 800px;
+    min-height: 800px;
+    max-height: 100%;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
     border-style: solid;

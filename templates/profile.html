@@ -18,7 +18,7 @@
                      style="height: 150px; width: 150px; border-radius: 100px;">
             {% else %}
                 <!-- Display a default image if the user hasn't uploaded a profile picture -->
-                <img src="{% static 'images/wood.jpg' %}" alt="Default Profile Picture"
+                <img src="{% static 'images/default_profile_pic.jpg' %}" alt="Default Profile Picture"
                      style="width: 200px; height: 200px;">
             {% endif %}
 
@@ -31,9 +31,9 @@
             <p><strong>Email:</strong> {{ user.email }}</p>
         </div>
 
-        <div class="user-details" style="margin: 20px;"><p>Описание: {{ user.description }}</p></div>
+        <div class="user-details" style="margin: 20px; text-wrap: normal;"><p>Описание: {{ user.description }}</p></div>
         {% if request.user == user %}
-            
+
             <div style="height: 40px; margin-bottom: 12px;">
                 <a class="profile-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
             </div>
@@ -44,7 +44,8 @@
             <div>
                 <form style="height: 40px; margin-bottom: 20px;" action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button style="margin-bottom: 30px; margin-top: 0;" class="profile-buttons" type="submit">Изход</button>
+                    <button style="margin-bottom: 30px; margin-top: 0;" class="profile-buttons" type="submit">Изход
+                    </button>
                 </form>
             </div>
         {% else %}
@@ -67,16 +68,19 @@
         <div class="post-grid">
             {% for post in posts %}
                 <div class="post-item">
-                    
+
                     <a href="{% url 'post_detail' post.id %}">
                         <img style="width: 200px; height: 200px;" src="{{ post.photos.url }}" alt="post photos"
                              class="img-fluid">
                     </a>
                 </div>
-            {% empty %}
-                <p>No posts yet.</p>
+
             {% endfor %}
         </div>
+        {% if not posts %}
+            <p style="font-size: 24px; padding-bottom: 20px;">Няма публикации</p>
+        {% endif %}
+
     </div>
 
 {% endblock %}

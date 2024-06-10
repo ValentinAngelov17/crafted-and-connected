@@ -14,6 +14,16 @@
 </head>
 <body>
 <nav>
+    <style>
+        .badge {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
     <div class="logo">
         <a href="{% url 'index' %}"><img src="{% static 'images/Crafted and connected.png' %}" alt="Logo"></a>
     </div>
@@ -33,7 +43,7 @@
     </div>
     {% if request.user.is_authenticated %}
         <div class="buttons">
-            <a href="#" class="after-login-buttons">Съобщения</a>
+            <a href="{% url 'messages_view' %}" class="after-login-buttons">Съобщения</a>
         </div>
         <div class="notification-icon">
             <a href="{% url 'notifications' %}">
@@ -61,7 +71,7 @@
 {% block page_content %}
 {% endblock %}
 <script>
-    document.querySelector('.hamburger-menu').addEventListener('click', function() {
+    document.querySelector('.hamburger-menu').addEventListener('click', function () {
         document.querySelector('nav').classList.toggle('show');
     });
 </script>

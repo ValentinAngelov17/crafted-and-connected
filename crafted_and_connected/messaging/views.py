@@ -1,7 +1,7 @@
 # messaging/views.py
 
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from .models import ChatRoom, Message
 from crafted_and_connected.authentication.models import CustomUser
@@ -20,7 +20,8 @@ def send_message(request):
         message = Message.objects.create(
             room=room,
             user=request.user,
-            content=message_content
+            content=message_content,
+            is_read=False  # Mark the new message as unread
         )
 
         return JsonResponse({
@@ -28,41 +29,65 @@ def send_message(request):
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
             'message': message.content,
-
-            'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),  # Optionally include timestamp
+            'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
         })
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 @login_required
 def chat_room(request, user_id):
-    first_name = request.GET.get('first_name')
-    last_name = request.GET.get('last_name')
-
     current_user = request.user
     target_user = get_object_or_404(CustomUser, id=user_id)
 
-    existing_room = ChatRoom.objects.filter(
-        participants=current_user
-    ).filter(participants=target_user).first()
+    chat_room = ChatRoom.objects.filter(participants=current_user).filter(participants=target_user).first()
+    if not chat_room:
+        chat_room = ChatRoom.objects.create(name=f"user_{current_user.id}_to_{target_user.id}")
+        chat_room.participants.add(current_user, target_user)
 
-    if not existing_room:
-        room_name = f"user_{current_user.id}_to_{target_user.id}"
-        existing_room = ChatRoom.objects.create(name=room_name)
-        existing_room.participants.add(current_user, target_user)
-
-    if first_name and last_name:
-        title = f"{first_name} {last_name}"
-    else:
-        title = "Chat Room"
+    # Mark all messages in this chat room as read for the current user
+    chat_room.messages.filter(user=target_user, is_read=False).update(is_read=True)
 
     context = {
-        'room': existing_room,
+        'room': chat_room,
         'room_json': json.dumps({
-            'id': existing_room.id,
-            'name': existing_room.name,
+            'id': chat_room.id,
+            'name': chat_room.name,
         }),
-        'title': title
+        'title': f"{target_user.first_name} {target_user.last_name}"
     }
-
     return render(request, 'messaging/chat_room.html', context)
+
+
+@login_required
+def messages_view(request):
+    user = request.user
+    chat_rooms = ChatRoom.objects.filter(participants=user)
+
+    chat_room_details = []
+    for room in chat_rooms:
+        other_participant = room.participants.exclude(id=user.id).first()
+        if other_participant:
+            unread_count = room.messages.filter(user=other_participant, is_read=False).count()
+            chat_room_details.append({
+                'room_id': room.id,
+                'user_id': other_participant.id,
+                'first_name': other_participant.first_name,
+                'last_name': other_participant.last_name,
+                'unread_count': unread_count,
+            })
+
+    return render(request, 'messaging/messages.html', {'chat_room_details': chat_room_details})
+
+
+@login_required
+def delete_chat_room(request, room_id):
+    try:
+        chat_room = ChatRoom.objects.get(id=room_id)
+        if request.user in chat_room.participants.all():
+            chat_room.delete()
+        else:
+            return HttpResponseForbidden("You are not authorized to delete this chat room.")
+    except ChatRoom.DoesNotExist:
+        return redirect('messages_view')
+
+    return redirect('messages_view')

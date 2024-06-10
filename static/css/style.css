@@ -953,6 +953,7 @@ li b {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    flex-wrap: wrap;
     padding: 16px;
 }
 
@@ -1170,5 +1171,8 @@ li b {
     nav.show .buttons a,
     nav.show .notification-icon a {
         margin: 1rem 0;
+    }
+    .user-details{
+        flex-direction: column;
     }
 }

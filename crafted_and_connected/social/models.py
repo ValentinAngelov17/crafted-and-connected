@@ -118,7 +118,7 @@ class Comment(models.Model):
     # Other fields...
 
     def __str__(self):
-        return f'Comment by {self.user} on {self.post.title}'
+        return f'Нов коментар от {self.user} на {self.post.title}'
 
 
 class Like(models.Model):
@@ -128,7 +128,7 @@ class Like(models.Model):
     # Other fields...
 
     def __str__(self):
-        return f'Like by {self.user} on {self.post.title}'
+        return f' {self.user} хареса {self.post.title}'
 
 
 class Notification(models.Model):

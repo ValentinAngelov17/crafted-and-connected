@@ -206,7 +206,7 @@ def create_order(request):
 
                 Notification.objects.create(
                     recipient=user,
-                    content=f"User {request.user.first_name} {request.user.last_name} placed a new order",
+                    content=f"Потребил {request.user.first_name} {request.user.last_name} поръча от Вас.",
                 )
 
             cart.items.all().delete()

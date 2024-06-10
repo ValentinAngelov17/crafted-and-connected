@@ -51,9 +51,9 @@
 
         <div>
             
-            <div class="posts-display" style="display: flex; justify-content: space-between; gap: 15px; margin-top: 30px;margin-left: 20px;">
+            <div class="post-grid" style=" margin-top: 30px;margin-left: 20px; ">
                 {% for post in posts %}
-                    <div class="post">
+                    <div>
                         <a style="height: 200px;" href="{% url 'post_detail' post.id %}">
                             <img src="{{ post.photos.url }}" alt="" style="width: 200px; height: 200px; border-radius: 30px;">
                         </a>

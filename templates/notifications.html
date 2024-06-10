@@ -12,10 +12,13 @@
                 <div class="notification"
                      style="text-align: center; font-family: 'Roboto Slab', serif; font-optical-sizing: auto; font-weight: 400; font-size: 20px;"
                      class="{% if not notification.read %}unread{% endif %}">
-                    <li>{{ notification.content }}</li>
+                  
                     {% if notification.order %}
-                        <a href="{% url 'order_details' notification.order.id %}">View Order</a>
-                    {% endif %}
+                        <li>Вашата поръчка №{{ notification.order_id }} е Приета.</li>
+                        <a href="{% url 'order_details' notification.order.id %}">Виж поръчката</a>
+                    {% else %}
+                       <li>{{ notification.content }}</li>
+                {% endif %}
                 </div>
 
             {% endfor %}
@@ -30,7 +33,7 @@
 
                     </form>
                 </div>
-                {% else %}
+            {% else %}
                 <h3 style="text-align: center; margin: 20px;">Нямате известия</h3>
             {% endif %}
     </div>

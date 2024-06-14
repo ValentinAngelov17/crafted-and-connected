@@ -1,7 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.conf import settings
 
 from crafted_and_connected.authentication.models import CustomUser
@@ -11,6 +10,13 @@ User = get_user_model()
 
 
 # Define your choices for categories and subcategories
+
+User = get_user_model()
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(User, related_name='following_set', on_delete=models.CASCADE)
+    followed = models.ForeignKey(User, related_name='followers_set', on_delete=models.CASCADE)
 
 
 class Post(models.Model):

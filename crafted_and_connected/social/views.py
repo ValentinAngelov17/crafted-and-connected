@@ -1,9 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment, Like, Notification
+from .models import Post, Comment, Like, Notification, Follow
 from .forms import PostForm, CommentForm
-from ..authentication.models import Follow
+from ..authentication.models import CustomUser
+from django.urls import reverse
 
 
 @login_required
@@ -66,6 +67,20 @@ def post_detail(request, post_id):
         'show_all': show_all,
     }
     return render(request, 'post_detail.html', context)
+
+
+@login_required
+def follow_user(request, user_id):
+    user_to_follow = get_object_or_404(CustomUser, id=user_id)
+    follow, created = Follow.objects.get_or_create(follower=request.user, followed=user_to_follow)
+    return redirect(reverse('user_profile', args=[user_id]))
+
+
+@login_required
+def unfollow_user(request, user_id):
+    user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
+    Follow.objects.filter(follower=request.user, followed=user_to_unfollow).delete()
+    return redirect(reverse('user_profile', args=[user_id]))
 
 
 @login_required

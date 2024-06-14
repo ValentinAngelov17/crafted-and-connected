@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth import get_user_model
+
 
 
 class CustomUser(AbstractUser):
@@ -19,9 +19,3 @@ class CustomUser(AbstractUser):
         return f"{self.first_name} {self.last_name}"
 
 
-User = get_user_model()
-
-
-class Follow(models.Model):
-    follower = models.ForeignKey(User, related_name='following_set', on_delete=models.CASCADE)
-    followed = models.ForeignKey(User, related_name='followers_set', on_delete=models.CASCADE)

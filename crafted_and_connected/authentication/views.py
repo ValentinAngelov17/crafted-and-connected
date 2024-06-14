@@ -2,15 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.generic import CreateView
 from crafted_and_connected.authentication.forms import CustomUserCreationForm, CustomUserLoginForm, \
     CustomPasswordChangeForm, ProfileForm
-from crafted_and_connected.authentication.models import Follow, CustomUser
+from crafted_and_connected.authentication.models import CustomUser
 from django.contrib.auth.hashers import make_password
-from crafted_and_connected.social.models import Post
+from crafted_and_connected.social.models import Post, Follow
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 User = get_user_model()
@@ -122,15 +121,4 @@ def user_profile(request, user_id):
     })
 
 
-@login_required
-def follow_user(request, user_id):
-    user_to_follow = get_object_or_404(CustomUser, id=user_id)
-    follow, created = Follow.objects.get_or_create(follower=request.user, followed=user_to_follow)
-    return redirect(reverse('user_profile', args=[user_id]))
 
-
-@login_required
-def unfollow_user(request, user_id):
-    user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
-    Follow.objects.filter(follower=request.user, followed=user_to_unfollow).delete()
-    return redirect(reverse('user_profile', args=[user_id]))

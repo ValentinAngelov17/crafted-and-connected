@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'crafted_and_connected.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "crafted_and_connected_database",
+        "NAME": "crafted_and_connected_db",
         "USER": "valentin159",
         "PASSWORD": "valentin951",
         "HOST": "127.0.0.1",

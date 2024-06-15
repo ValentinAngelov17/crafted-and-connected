@@ -12,10 +12,10 @@ from django.contrib.auth.hashers import make_password
 from crafted_and_connected.social.models import Post, Follow
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+
 User = get_user_model()
 
 
-# Create your views here.
 class CustomUserRegistrationView(CreateView):
     template_name = 'register.html'
     form_class = CustomUserCreationForm
@@ -100,6 +100,7 @@ def update_profile(request):
         'password_form': password_form,
     })
 
+
 @login_required
 def user_profile(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
@@ -119,6 +120,3 @@ def user_profile(request, user_id):
         'is_following': is_following,
         'room_name': room_name,
     })
-
-
-

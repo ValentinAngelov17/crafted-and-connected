@@ -21,7 +21,7 @@
 {% for category_key, category_display in categories %}
     <button class="category-btn">
         <div class="category-background" style="background-image: url('static/images/{{ category_key }}.jpg');"></div>
-        <span><a href="{% url 'category_view' category_key %}" style="color: white;">{{ category_display }}</a></span>
+        <span><a href="{% url 'category_view' category_key %}" style="color: white; width: 280px; height: 120px;">{{ category_display }}</a></span>
     </button>
     {% if forloop.counter|divisibleby:5 %}
             </div>

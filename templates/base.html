@@ -27,9 +27,7 @@
     <div class="logo">
         <a href="{% url 'index' %}"><img src="{% static 'images/Crafted and connected.png' %}" alt="Logo"></a>
     </div>
-    <div class="buttons">
-        <a href="{% url 'register' %}">За нас</a>
-    </div>
+    
     {% if request.user.is_authenticated %}
         <div class="buttons">
             <a href="{% url 'add_post' %}" class="after-login-buttons">Добави</a>
@@ -61,7 +59,7 @@
         {% if request.user.is_authenticated %}
             <a href="{% url 'profile' %}">Профил</a>
         {% else %}
-            <a href="{% url 'register' %}">Регистрация</a>
+            <a href="{% url 'register' %}">Вход/Регистрация</a>
         {% endif %}
     </div>
     <div class="hamburger-menu">

@@ -44,11 +44,11 @@
                 </div>
                 <div class="item3">
                     <div class="buttons">
-                        <a class="after-login-buttons"
-                       href="{% url 'chat_room' user_id=post.user.id %}?first_name={{ post.user.first_name }}&last_name={{ post.user.last_name }}">Съобщение</a>
+                        <a class="after-login-buttons" style="margin-left: 30px;"
+                           href="{% url 'chat_room' user_id=post.user.id %}?first_name={{ post.user.first_name }}&last_name={{ post.user.last_name }}">Съобщение</a>
                     </div>
                 </div>
-                <div class="item2"><i class="fas fa-star" style="color: gold;"> 5.0</i></div>
+                
                 <div class="item12">
                     <strong><b>{{ post.title }}</b></strong>
                 </div>
@@ -102,16 +102,16 @@
                             </div>
                         </li>
                     {% empty %}
-                        <p style="padding-left: 20px;">No comments yet.</p>
+                        <p style="padding-left: 20px;">Няма коментари.</p>
                     {% endfor %}
                 </ul>
                 {% if not show_all and post.comments.count > 5 %}
-                    <button id="load-more-comments" class="profile-buttons" style="font-size: 18px; margin: 0;">Load All
-                        Comments
+                    <button id="load-more-comments" class="profile-buttons" style="font-size: 18px; margin: 0;">Зареди
+                        всички коментари
                     </button>
                 {% elif show_all %}
-                    <button id="hide-comments" class="profile-buttons" style="font-size: 18px; margin: 0;">Hide
-                        Comments
+                    <button id="hide-comments" class="profile-buttons" style="font-size: 18px; margin: 0;">Скрий
+                        коментарите
                     </button>
                 {% endif %}
 
@@ -120,9 +120,11 @@
             </div>
 
             <div class="comments-property">
-                <div>
-                    <h3 style="margin-left: 20px;">Коментари: {{ post.comments.count }}</h3>
-                </div>
+                {% if post.comments.count > 0 %}
+                    <div>
+                        <h3 style="margin-left: 20px;">Коментари: {{ post.comments.count }}</h3>
+                    </div>
+                {% endif %}
 
                 <div>
                     <div class="buttons">

@@ -565,6 +565,7 @@ header {
 
 .grid-container {
     display: grid;
+    max-width: 800px;
     grid-template-columns: auto auto auto auto;
     gap: 10px;
     padding: 10px;

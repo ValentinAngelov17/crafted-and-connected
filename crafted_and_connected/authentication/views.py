@@ -107,12 +107,14 @@ def user_profile(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     posts = Post.objects.filter(user=user).order_by('-created_at')
     post_count = posts.count()
+    followers_count = Follow.objects.filter(followed=user).count()
     following_count = Follow.objects.filter(follower=user).count()
     is_following = Follow.objects.filter(follower=request.user, followed=user).exists()
     return render(request, 'authentication/profile.html', {
         'user': user,
+        'followers_count': followers_count,
         'following_count': following_count,
         'posts': posts,
         'post_count': post_count,
-        'is_following': is_following,
-    })
+        'is_following': is_following, }
+    )

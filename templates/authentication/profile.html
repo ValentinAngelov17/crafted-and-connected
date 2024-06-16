@@ -2,26 +2,14 @@
 {% load static %}
 {% block page_content %}
     <title>Crafted & Connected</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
     <div class="user-profile">
         <div><h1 style="font-family:  'Roboto Slab', serif;
             font-optical-sizing: auto;
             font-weight: 400;
             font-style: normal;">Профил</h1></div>
         <div>
-            {% if user.profile_picture %}
-                <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture"
-                     style="height: 150px; width: 150px; border-radius: 100px;">
-            {% else %}
-                <!-- Display a default image if the user hasn't uploaded a profile picture -->
-                <img src="{% static 'images/default_profile_pic.jpg' %}" alt="Default Profile Picture"
-                     style="width: 200px; height: 200px;">
-            {% endif %}
-
+            <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture"
+                 style="height: 150px; width: 150px; border-radius: 100px;">
         </div>
         <div class="user-details">
             <p style="height: 20px;"><strong>Име:</strong> {{ user.first_name }}</p>

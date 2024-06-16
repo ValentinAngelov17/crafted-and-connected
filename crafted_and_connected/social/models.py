@@ -1,15 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.conf import settings
-
-from crafted_and_connected.authentication.models import CustomUser
-
-
-User = get_user_model()
-
-
-# Define your choices for categories and subcategories
 
 User = get_user_model()
 
@@ -96,7 +87,7 @@ class Post(models.Model):
     subcategory = models.CharField(max_length=50)
     photos = models.ImageField(upload_to='post_photos/')
     created_at = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
 
     def save(self, *args, **kwargs):
         if self.category not in self.SUBCATEGORY_CHOICES or \
@@ -116,19 +107,17 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-    # Other fields...
 
     def __str__(self):
         return f'Нов коментар от {self.user} на {self.post.title}'
 
 
 class Like(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='likes', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='post_likes', on_delete=models.CASCADE)
 
     # Other fields...

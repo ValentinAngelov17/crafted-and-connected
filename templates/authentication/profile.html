@@ -18,10 +18,10 @@
             <p><strong>Последвани: </strong>{{ following_count }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
         </div>
-
-        <div class="user-details" style="margin: 20px; text-wrap: normal;"><p>Описание: {{ user.description }}</p></div>
+        <div class="user-details" style="margin: 20px; text-wrap: normal;">
+            <p>Описание: {{ user.description }}</p>
+        </div>
         {% if request.user == user %}
-
             <div style="height: 40px; margin-bottom: 12px;">
                 <a class="profile-buttons" href="{% url 'update_profile_picture' %}">Редактиране</a>
             </div>
@@ -40,7 +40,8 @@
             {% if user != request.user %}
                 <div class="buttons" style="margin-bottom: 20px;">
                     <a class="after-login-buttons"
-                       href="{% url 'chat_room' user_id=user.id %}?first_name={{ user.first_name }}&last_name={{ user.last_name }}">Съобщение</a>
+                       href="{% url 'chat_room' user_id=user.id %}?first_name={{ user.first_name }}
+                       &last_name={{ user.last_name }}">Съобщение</a>
                 </div>
             {% endif %}
             {% if not is_following %}
@@ -55,6 +56,7 @@
                 </form>
             {% endif %}
         {% endif %}
+    
         <h2> {{ post_count }} Публикации</h2>
         <div class="post-grid">
             {% for post in posts %}

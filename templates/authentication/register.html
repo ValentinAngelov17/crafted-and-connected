@@ -13,25 +13,13 @@
             Социална платформа за купуване и продаване на ръчно изработени изделия
         </h2>
     </header>
-
-    <!-- container div -->
+    
     <div class="container">
- 
-        <!-- upper button section to select
-             the login or signup form -->
-        
         <div class="btn">
             <button class="signup" style="left: 12px;"><a href="{% url 'login' %}">Вход</a></button>
             <button class="login" style="width: 152px; right: -29px;"><a href="{% url 'register' %}">Регистрация</a></button>
         </div>
- 
-        <!-- Form section that contains the
-             login and the signup form -->
         <div class="form-section">
- 
-            <!-- login form -->
-            
-            <!-- signup form -->
             <div class="signup-box">
                 <form method="post">
                     {% csrf_token %}
@@ -41,6 +29,8 @@
             </div>
         </div>
     </div>
-    <script src="{% static 'css/register.js' %}"></script>
 
 {% endblock %}
+
+
+

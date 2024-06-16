@@ -2,11 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.generic import CreateView
 from crafted_and_connected.authentication.forms import CustomUserCreationForm, CustomUserLoginForm, \
     CustomPasswordChangeForm, ProfileForm
+from django.urls import reverse_lazy
 from crafted_and_connected.authentication.models import CustomUser
 from django.contrib.auth.hashers import make_password
 from crafted_and_connected.social.models import Post, Follow
@@ -17,7 +18,7 @@ User = get_user_model()
 
 
 class CustomUserRegistrationView(CreateView):
-    template_name = 'register.html'
+    template_name = 'authentication/register.html'
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('index')
 
@@ -29,7 +30,7 @@ class CustomUserRegistrationView(CreateView):
 
 class CustomLoginView(LoginView):
     authentication_form = CustomUserLoginForm
-    template_name = 'login.html'
+    template_name = 'authentication/login.html'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -95,7 +96,7 @@ def update_profile(request):
         profile_form = ProfileForm(instance=request.user)
         password_form = CustomPasswordChangeForm(user=request.user)
 
-    return render(request, 'update_profile.html', {
+    return render(request, 'authentication/update_profile.html', {
         'profile_form': profile_form,
         'password_form': password_form,
     })
@@ -104,19 +105,14 @@ def update_profile(request):
 @login_required
 def user_profile(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
-    room_name = f"user_{request.user.id}_to_{user_id}"
-    print("Room name:", room_name)
     posts = Post.objects.filter(user=user).order_by('-created_at')
     post_count = posts.count()
-    followers_count = Follow.objects.filter(followed=user).count()
     following_count = Follow.objects.filter(follower=user).count()
     is_following = Follow.objects.filter(follower=request.user, followed=user).exists()
-    return render(request, 'profile.html', {
+    return render(request, 'authentication/profile.html', {
         'user': user,
-        'followers_count': followers_count,
         'following_count': following_count,
         'posts': posts,
         'post_count': post_count,
         'is_following': is_following,
-        'room_name': room_name,
     })

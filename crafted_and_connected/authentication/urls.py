@@ -1,7 +1,7 @@
+# authentication urls
 from django.urls import path
 from crafted_and_connected.authentication.views import CustomUserRegistrationView, CustomLoginView, profile, \
     logout_view, update_profile, user_profile
-
 
 urlpatterns = [
     path('register/', CustomUserRegistrationView.as_view(), name='register'),
@@ -11,3 +11,5 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('update_profile/', update_profile, name='update_profile_picture'),
 ]
+
+

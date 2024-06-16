@@ -1,9 +1,8 @@
 from django import forms
+from .models import CustomUser
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
-
-from .models import CustomUser
 
 
 class CustomUserCreationForm(forms.ModelForm):
@@ -39,6 +38,7 @@ class ProfileForm(forms.ModelForm):
             'email': _('Електронна поща'),
             'profile_picture': _('Профилна снимка')
         }
+
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), label='Описание', required=False)
 
 

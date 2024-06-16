@@ -15,18 +15,15 @@
         </h2>
     </header>
 
-    <!-- container div -->
+ 
     <div class="container">
 
-        <!-- upper button section to select
-             the login or signup form -->
+ 
         <div class="btn">
             <button class="login"><a href="{% url 'login' %}">Вход</a></button>
             <button class="signup"><a href="{% url 'register' %}">Регистрация</a></button>
         </div>
 
-        <!-- Form section that contains the
-             login and the signup form -->
         <div>
             {% if error_message %}
                 <div class="message-box">{{ error_message }}</div>
@@ -35,7 +32,6 @@
         <div class="form-section">
 
 
-            <!-- login form -->
             <div class="login-box">
                 <form method="post">
                     {% csrf_token %}
@@ -49,5 +45,4 @@
 
         </div>
     </div>
-    <script src="{% static 'css/register.js' %}"></script>
 {% endblock %}

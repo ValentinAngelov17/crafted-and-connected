@@ -1,9 +1,6 @@
-from collections import defaultdict
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_GET
 from django.urls import reverse
@@ -12,10 +9,10 @@ from crafted_and_connected.social.models import Post, Notification
 from crafted_and_connected.store.forms import CheckoutForm
 from crafted_and_connected.store.models import Cart, CartItem, Order
 from decimal import Decimal
-
+from collections import defaultdict
 User = get_user_model()
 
-from collections import defaultdict
+
 
 
 def index(request):
@@ -29,7 +26,7 @@ def index(request):
 
 def register(request):
     if request.method == 'GET':
-        return render(request, 'register.html')
+        return render(request, 'authentication/register.html')
 
 
 @require_GET

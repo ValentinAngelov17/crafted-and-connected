@@ -29,7 +29,7 @@ def add_post(request):
             return redirect('profile')
     else:
         form = PostForm()
-    return render(request, 'add_post.html', {'form': form})
+    return render(request, 'social/add_post.html', {'form': form})
 
 
 def load_subcategories(request):
@@ -66,7 +66,7 @@ def post_detail(request, post_id):
         'is_following_post_user': is_following_post_user,
         'show_all': show_all,
     }
-    return render(request, 'post_detail.html', context)
+    return render(request, 'social/post_detail.html', context)
 
 
 @login_required
@@ -114,7 +114,7 @@ def add_comment(request, post_id):
 def notifications(request):
     user = request.user
     notifications = Notification.objects.filter(recipient=user).order_by('-timestamp')
-    return render(request, 'notifications.html', {'notifications': notifications})
+    return render(request, 'social/notifications.html', {'notifications': notifications})
 
 
 @login_required

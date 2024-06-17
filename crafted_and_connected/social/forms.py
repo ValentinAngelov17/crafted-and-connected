@@ -14,8 +14,8 @@ class PostForm(forms.ModelForm):
         super(PostForm, self).__init__(*args, **kwargs)
 
         # Set the initial choices for category and subcategory
-        self.fields['category'].choices = [('', 'Select a category')] + list(Post.CATEGORY_CHOICES)
-        self.fields['subcategory'].choices = [('', 'Select a subcategory')]
+        self.fields['category'].choices = [('', 'Избери категория')] + list(Post.CATEGORY_CHOICES)
+        self.fields['subcategory'].choices = [('', 'Избери подкатегория')]
 
         # Set labels for fields
         self.fields['category'].label = 'Категория'
@@ -29,10 +29,10 @@ class PostForm(forms.ModelForm):
         # Set choices for subcategory based on the selected category or instance category
         if 'category' in self.data:
             category = self.data.get('category')
-            self.fields['subcategory'].choices = [('', 'Select a subcategory')] + list(Post.SUBCATEGORY_CHOICES.get(category, []))
+            self.fields['subcategory'].choices = [('', 'Избери подкатегория')] + list(Post.SUBCATEGORY_CHOICES.get(category, []))
         elif self.instance.pk:
             category = self.instance.category
-            self.fields['subcategory'].choices = [('', 'Select a subcategory')] + list(Post.SUBCATEGORY_CHOICES.get(category, []))
+            self.fields['subcategory'].choices = [('', 'Избери подкатегория')] + list(Post.SUBCATEGORY_CHOICES.get(category, []))
 
 
 class CommentForm(forms.ModelForm):

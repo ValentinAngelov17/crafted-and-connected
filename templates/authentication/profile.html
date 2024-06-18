@@ -3,10 +3,7 @@
 {% block page_content %}
     <title>Crafted & Connected</title>
     <div class="user-profile">
-        <div><h1 style="font-family:  'Roboto Slab', serif;
-            font-optical-sizing: auto;
-            font-weight: 400;
-            font-style: normal;">Профил</h1></div>
+        <div><h1 style="font-family: 'Montserrat', sans-serif;">Профил</h1></div>
         <div>
             <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture"
                  style="height: 150px; width: 150px; border-radius: 100px;">
@@ -57,7 +54,7 @@
             {% endif %}
         {% endif %}
     
-        <h2> {{ post_count }} Публикации</h2>
+        <h2 style="font-family: 'Montserrat', sans-serif;"> {{ post_count }} Публикации</h2>
         <div class="post-grid">
             {% for post in posts %}
                 <div class="post-item">
@@ -71,7 +68,7 @@
             {% endfor %}
         </div>
         {% if not posts %}
-            <p style="font-size: 24px; padding-bottom: 20px;">Няма публикации</p>
+            <p style="font-size: 24px; padding-bottom: 20px; font-family: 'Montserrat', sans-serif;">Няма публикации</p>
         {% endif %}
 
     </div>

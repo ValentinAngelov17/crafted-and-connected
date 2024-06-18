@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Quando&family=Roboto+Slab:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -11,7 +12,7 @@ body {
 }
 
 .top-header, .top-header-register {
-    font-family: "Roboto Slab", serif;
+    font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -46,7 +47,7 @@ body {
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    font-family: "Roboto Slab", serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 600;
     font-style: normal;
     text-align: center;
@@ -132,6 +133,7 @@ nav {
 }
 
 .buttons .after-login-buttons {
+    font-family: "Montserrat", sans-serif;
     background-color: rgb(18 55 38);
 }
 
@@ -152,7 +154,7 @@ nav {
 }
 
 .new-section div h2 {
-    font-family: "Roboto Slab", serif;
+    font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -522,6 +524,7 @@ header {
 /* picture design*/
 .post {
     display: flex;
+    font-family: "Montserrat", sans-serif;
     justify-content: center;
     border-radius: 50px;
     width: 100%;
@@ -914,7 +917,7 @@ li b {
 .categories-list {
 
     color: white;
-    font-family: "Roboto Slab", serif;
+    font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -926,6 +929,7 @@ li b {
 }
 
 .user-profile {
+    font-family: 'Montserrat', sans-serif;
     text-align: center;
     height: 100%;
     margin: 0 10%;
@@ -941,7 +945,7 @@ li b {
     margin: 10px;
     font-size: 26px;
     color: black;
-    font-family: "Roboto Slab", serif;
+    font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -1073,7 +1077,7 @@ li b {
 }*/
 
 .category-title {
-    font-family: "Roboto Slab", serif;
+    font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
     font-weight: 800;
     font-style: normal;
@@ -1088,6 +1092,7 @@ li b {
 
 .profile-buttons {
     background-color: rgb(18 55 38);
+    font-family: "Montserrat", sans-serif;
     color: white;
     padding: 10px 5px;
     border: 1px solid white;

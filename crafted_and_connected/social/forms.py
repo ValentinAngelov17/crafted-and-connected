@@ -1,6 +1,6 @@
+
 from django import forms
 from .models import Post, Comment
-
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -29,10 +29,12 @@ class PostForm(forms.ModelForm):
         # Set choices for subcategory based on the selected category or instance category
         if 'category' in self.data:
             category = self.data.get('category')
-            self.fields['subcategory'].choices = [('', 'Избери подкатегория')] + list(Post.SUBCATEGORY_CHOICES.get(category, []))
+            self.fields['subcategory'].choices = ([('', 'Избери подкатегория')]
+                                                  + list(Post.SUBCATEGORY_CHOICES.get(category, [])))
         elif self.instance.pk:
             category = self.instance.category
-            self.fields['subcategory'].choices = [('', 'Избери подкатегория')] + list(Post.SUBCATEGORY_CHOICES.get(category, []))
+            self.fields['subcategory'].choices = ([('', 'Избери подкатегория')]
+                                                  + list(Post.SUBCATEGORY_CHOICES.get(category, [])))
 
 
 class CommentForm(forms.ModelForm):

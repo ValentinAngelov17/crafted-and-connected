@@ -6,7 +6,7 @@
             padding: 20px 20px;
             border: 0 solid #ccc;
             cursor: pointer;
-    
+
 
         }
 
@@ -23,24 +23,25 @@
             font-size: 18px;
         }
     </style>
-    <h1 style="text-align: center; margin-bottom: 20px;">Поръчки</h1>
-    <div class="user-profile" style="min-width: 300px; max-width: 400px; min-height: 400px; align-content: center; margin: auto;">
+    <h1 style="text-align: center; margin-bottom: 20px; font-family: 'Montserrat', sans-serif;">Поръчки</h1>
+    <div class="user-profile"
+         style="font-family: 'Montserrat', sans-serif; min-width: 300px; max-width: 400px; min-height: 400px; align-content: center; margin: auto;">
 
 
-        <div style="display: flex; gap: 0px; justify-content: center; width: 100%">
+        <div style="display: flex; gap: 0px; justify-content: center; width: 100%; font-family: 'Montserrat', sans-serif;">
             <button id="buyingButton"
                     class="order-history-buttons {% if filter == 'buying' %}button-green{% else %}button-white{% endif %}"
                     onclick="filterOrders('buying')" style="width: 50%;
+                    font-family: 'Montserrat', sans-serif;
             border-top-left-radius: 50px;">Купувам
             </button>
             <button id="sellingButton"
                     class="order-history-buttons {% if filter == 'selling' %}button-green{% else %}button-white{% endif %}"
-                    onclick="filterOrders('selling')" style="width: 50%;
+                    onclick="filterOrders('selling')" style="width: 50%; font-family: 'Montserrat', sans-serif;
             border-top-right-radius: 50px;">Продавам
             </button>
         </div>
 
-        
 
         <ul>
             {% for order in orders %}

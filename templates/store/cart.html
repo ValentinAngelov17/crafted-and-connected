@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block page_content %}
-    <div class="user-profile">
+    <div class="user-profile" style="font-family: 'Montserrat', sans-serif;">
         <h1 style="padding: 12px;">Количка</h1>
         {% if cart %}
 
@@ -36,13 +36,13 @@
             
             <br>
                  <br><br>
-            <h3>Billing Details:</h3>
+            <h3>Данни за доставка:</h3>
             {{ form.as_p }}
             <button class="profile-buttons" type="submit" style="margin-top: 20px; width: 150px; font-size: 20px;">Продължи</button>
             
         </form>
         {% else %}
-            <p>Your cart is empty.</p>
+            <p>Количката е празна.</p>
         {% endif %}
     </div>
 {% endblock %}

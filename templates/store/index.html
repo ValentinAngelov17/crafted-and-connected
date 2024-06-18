@@ -1,46 +1,48 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block page_content %}
-<title>Crafted & Connected</title>
+    <title>Crafted & Connected</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quando&display=swap" rel="stylesheet">
-<section>
-    <header class="top-header">
-        <h1>
-            Crafted & Connected
-        </h1>
-        <h2>
-            Социална платформа за купуване и продаване на ръчно изработени изделия
-        </h2>
-    </header>
-<div class="categories">
+    <section>
+        <header class="top-header">
+            <h1>
+                Crafted & Connected
+            </h1>
+            <h2>
+                Социална платформа за купуване и продаване на ръчно изработени изделия
+            </h2>
+        </header>
+        <div class="categories">
 
-{% for category_key, category_display in categories %}
-    <button class="category-btn">
-        <div class="category-background" style="background-image: url('static/images/{{ category_key }}.jpg');"></div>
-        <span><a href="{% url 'category_view' category_key %}" style="color: white; width: 280px; height: 120px;">{{ category_display }}</a></span>
-    </button>
-    {% if forloop.counter|divisibleby:5 %}
+            {% for category_key, category_display in categories %}
+                <button class="category-btn">
+                    <div class="category-background"
+                         style="background-image: url('static/images/{{ category_key }}.jpg');"></div>
+                    <span><a href="{% url 'category_view' category_key %}"
+                             style="color: white; width: 280px; height: 120px;">{{ category_display }}</a></span>
+                </button>
+                {% if forloop.counter|divisibleby:5 %}
+                    </div>
+                    <div class="categories">
+                {% endif %}
+            {% endfor %}
             </div>
-            <div class="categories">
-        {% endif %}
-{% endfor %}
-</div>
 
-</section>
-<section>
+    </section>
+    <section>
 
-    <header class="top-header">
-        <h2>Най-нови предложения </h2>
-    </header>
-</section>
-<div class="pin_container" id="latest-posts-container">
+        <header class="top-header">
+            <h2>Най-нови предложения </h2>
+        </header>
+    </section>
+    <div class="pin_container" id="latest-posts-container">
 
-</div>
- <script>
+    </div>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             fetch('/api/latest-posts/')
                 .then(response => response.json())

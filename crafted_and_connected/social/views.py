@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment, Like, Notification, Follow
+from .models import Post, Notification, Follow
 from .forms import PostForm, CommentForm
 from ..authentication.models import CustomUser
 from django.urls import reverse
@@ -130,3 +130,4 @@ def clear_notifications(request):
     user = request.user
     Notification.objects.filter(recipient=user).delete()
     return redirect('notifications')
+

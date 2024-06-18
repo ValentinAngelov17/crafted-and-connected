@@ -21,7 +21,7 @@ def index(request):
         'categories': categories,
     }
 
-    return render(request, 'index.html', context)
+    return render(request, 'store/index.html', context)
 
 
 def register(request):
@@ -56,7 +56,7 @@ def category_view(request, category, subcategory=None):
         'categories': categories,
         'subcategories_dict': subcategories_dict,
     }
-    return render(request, 'category.html', context)
+    return render(request, 'store/category.html', context)
 
 
 def search(request):
@@ -65,10 +65,10 @@ def search(request):
 
     if query:
         results = Post.objects.filter(
-            Q(title__icontains=query) | Q(description__icontains=query)
+            Q(title__icontains=query)
         )
 
-    return render(request, 'search_results.html', {'query': query, 'results': results})
+    return render(request, 'store/search_results.html', {'query': query, 'results': results})
 
 
 def add_to_cart(request, post_id):
@@ -92,7 +92,7 @@ def view_cart(request):
     if request.method == 'POST':
         return redirect('checkout')
 
-    return render(request, 'cart.html', {'cart': cart})
+    return render(request, 'store/cart.html', {'cart': cart})
 
 
 @login_required
@@ -149,7 +149,7 @@ def checkout(request):
         if form.is_valid():
             delivery_option = request.POST.get('delivery')
 
-            return render(request, 'order_summary.html', {
+            return render(request, 'store/order_summary.html', {
                 'cart': cart,
                 'total_sum': total_sum,
                 'total_delivery_sum': total_delivery_sum,
@@ -165,7 +165,7 @@ def checkout(request):
         }
         form = CheckoutForm(initial=initial_data)
 
-    return render(request, 'checkout.html',
+    return render(request, 'store/checkout.html',
                   {'cart': cart, 'total_sum': total_sum, 'total_delivery_sum': total_delivery_sum, 'cart_sum': cart_sum,
                    'form': form})
 
@@ -208,7 +208,7 @@ def create_order(request):
 
             cart.items.all().delete()
 
-            return render(request, 'order_confirmation.html', {'orders': orders})
+            return render(request, 'store/order_confirmation.html', {'orders': orders})
 
     return redirect('checkout')
 
@@ -222,7 +222,7 @@ def order_history(request):
     else:
         orders = Order.objects.filter(user=request.user)
 
-    return render(request, 'order_history.html', {'orders': orders, 'filter': filter_type})
+    return render(request, 'store/order_history.html', {'orders': orders, 'filter': filter_type})
 
 
 @login_required
@@ -239,5 +239,5 @@ def order_details(request, order_id):
             order.save()
         return redirect('order_details', order_id=order.id)
 
-    return render(request, 'order_details.html',
+    return render(request, 'store/order_details.html',
                   {'order': order, 'items': items})

@@ -61,13 +61,13 @@
                 </div>
 
                 <div class="item5">
-                    <div class="buttons">
-                        <a href="">{{ post.get_category_display }}</a>
+                    <div class="buttons" >
+                        <a href=""  class="post-cat-and-subcat">{{ post.get_category_display }}</a>
                     </div>
 
                 </div>
                 <div class="buttons">
-                    <a href="">{{ post.get_subcategory_display }}</a>
+                    <a href="" class="post-cat-and-subcat">{{ post.get_subcategory_display }}</a>
                 </div>
                 <div class="item6">
                     Цена: {{ post.price }} лв
@@ -131,7 +131,7 @@
                         <form method="POST" action="{% url 'like_post' post.id %}">
                             {% csrf_token %}
                             <button type="submit" class="like-button">
-                                <i class="fas fa-heart" style="color: red;">{% if is_liked %} Unlike {% else %}
+                                <i class="fas fa-heart" style="color: red; padding-left: 20px;">{% if is_liked %} Unlike {% else %}
                                     Like {% endif %}</i>
                             </button>
                             <i class="fas fa-heart" style="color: red;">{{ post.likes.count }} likes</i>

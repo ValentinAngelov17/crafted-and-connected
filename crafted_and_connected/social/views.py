@@ -22,7 +22,7 @@ def add_post(request):
                 follower = follower_relation.follower
                 Notification.objects.create(
                     recipient=follower,
-                    content=f"User {request.user.first_name} {request.user.last_name} added a new post '{post.title}'",
+                    content=f"{request.user.first_name} {request.user.last_name} добави нова публикация '{post.title}'",
                     post=post
                 )
 
@@ -130,4 +130,3 @@ def clear_notifications(request):
     user = request.user
     Notification.objects.filter(recipient=user).delete()
     return redirect('notifications')
-

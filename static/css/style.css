@@ -140,6 +140,7 @@ nav {
 .buttons a {
     color: #fff;
     text-decoration: none;
+    white-space: nowrap;
     margin-left: 10px;
     margin-right: 10px;
     padding: 8px 20px;

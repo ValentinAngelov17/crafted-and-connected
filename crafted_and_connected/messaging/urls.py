@@ -8,5 +8,3 @@ urlpatterns = [
     path('messages/', views.messages_view, name='messages_view'),
     path('delete/<int:room_id>/', views.delete_chat_room, name='delete_chat_room'),
 ]
-
-

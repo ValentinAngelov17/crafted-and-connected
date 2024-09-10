@@ -6,7 +6,9 @@ Registration
 ![image](https://github.com/user-attachments/assets/3627ec36-8a0c-43e1-94f2-00b002152d07)
 Login
 ![image](https://github.com/user-attachments/assets/94d4e1f7-c7df-49a8-9ab7-1c00075864b1)
+
 User profile after succesfull registration
+
 ![image](https://github.com/user-attachments/assets/934c7057-2519-4209-9570-8981aff11e49)
 
 Profile edit

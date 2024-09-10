@@ -1,3 +1,5 @@
+Platform for sharing and selling handmade item
+
 Database diagram
 ![image](https://github.com/user-attachments/assets/63dadeb5-9c8d-48ef-a52a-fe748025c1f2)
 Registration

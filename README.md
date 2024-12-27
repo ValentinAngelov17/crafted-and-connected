@@ -1,7 +1,50 @@
-Platform for sharing and selling handmade items
+Crafted and Connected 🧵✨
+
+A platform for handmade enthusiasts to showcase, share, and sell their creations. Built using Django, this web application enables users to create personalized profiles, manage posts, browse through categories, and engage in seamless shopping and order management.
+
+Features
+
+-User Registration and Authentication:
+
+Register, log in, and maintain secure access to personalized accounts.
+
+-Editable User Profiles:
+
+Update personal details and upload profile pictures.
+
+Post Management
+
+-Add Posts:
+
+Showcase handmade creations with descriptive text and images.
+
+-Browse Posts:
+
+Explore content by category, subcategory, or search by keywords.
+
+-Shopping and Orders
+
+Shopping Cart:
+
+-Add items to a cart, adjust quantities, and provide delivery details.
+
+Order Management:
+
+-View detailed order history and manage active orders.
+
+Navigation
+
+-Homepage:
+
+View the latest posts and featured content.
+
 
 Database diagram
+
 ![image](https://github.com/user-attachments/assets/63dadeb5-9c8d-48ef-a52a-fe748025c1f2)
+
+-Screenshots
+
 Registration
 ![image](https://github.com/user-attachments/assets/3627ec36-8a0c-43e1-94f2-00b002152d07)
 Login
